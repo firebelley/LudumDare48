@@ -11,7 +11,7 @@ on:
 
 jobs:
   export_game:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     name: Export Game
     steps:
       - name: Checkout Files
