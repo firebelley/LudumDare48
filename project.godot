@@ -10,7 +10,7 @@ config_version=4
 
 [application]
 
-config/name="GodotTemplate"
+config/name="LudumDare"
 run/main_scene="res://scenes/Main.tscn"
 config/icon="res://icon.png"
 
