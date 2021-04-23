@@ -32,7 +32,7 @@ jobs:
           godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.3/mono/Godot_v3.3-stable_mono_export_templates.tpz
           relative_project_path: .
           generate_release_notes: true
-          update_windows_icons: true
+          update_windows_icons: false
 
           ## USE THIS FOR TAG PUSHES
           base_version: ${{ steps.tag_version.outputs.TAG_VERSION}}
