@@ -1,4 +1,3 @@
-using Godot;
 using GodotUtilities.StateManagement;
 
 namespace Game.State
