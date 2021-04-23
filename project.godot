@@ -14,6 +14,10 @@ config/name="LudumDare"
 run/main_scene="res://scenes/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+GameState="*res://scripts/State/GameState.cs"
+
 [mono]
 
 project/auto_update_project=false
