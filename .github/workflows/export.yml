@@ -1,0 +1,41 @@
+# on:
+#   push:
+#     branches:
+#       - release
+
+## FOR TAG PUSHES
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  export_game:
+    runs-on: ubuntu-latest
+    name: Export Game
+    steps:
+      - name: Checkout Files
+        uses: actions/checkout@v2.3.1
+        with:
+          fetch-depth: 0
+
+      ## FOR TAG PUSHES
+      - name: Get Tag Version
+        id: tag_version
+        run: |
+          echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}
+
+      - name: Godot Export
+        uses: firebelley/godot-export@v2.6.1
+        with:
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.2.4/rc2/mono/Godot_v3.2.4-rc2_mono_linux_headless_64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.2.4/rc2/mono/Godot_v3.2.4-rc2_mono_export_templates.tpz
+          relative_project_path: .
+          generate_release_notes: true
+          update_windows_icons: false
+
+          ## USE THIS FOR TAG PUSHES
+          base_version: ${{ steps.tag_version.outputs.TAG_VERSION}}
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
