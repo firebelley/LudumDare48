@@ -6,8 +6,7 @@ namespace Game
 {
     public class Building : Node2D
     {
-        private Vector2 tilePosition;
-        private Vector2 tileSize;
+        public Vector2 TilePosition { get; private set; }
 
         [Export]
         public int Radius { get; private set; } = 1;
@@ -16,23 +15,31 @@ namespace Game
         [Export]
         public Texture GhostTexture { get; private set; }
 
+        private TileMap tileMap;
+
         public override void _EnterTree()
         {
-            tileSize = this.GetAncestor<BaseLevel>().TileMap.CellSize;
+            tileMap = this.GetAncestor<BaseLevel>().TileMap;
         }
 
         public override void _Ready()
         {
             GameState.BoardStore.DispatchAction(new BoardActions.ResourcesSpent { Count = ResourceCost });
+            SetTilePositionFromGlobalPosition();
+        }
+
+        public void SetTilePositionFromGlobalPosition()
+        {
+            TilePosition = tileMap.WorldToMap(GlobalPosition);
+            var resources = GetNearbyResourceCount();
+            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesGained { Count = resources });
+            GD.Print(GameState.BoardStore.State.ResourceCount);
         }
 
         public void SetTilePosition(Vector2 tilePos)
         {
-            GlobalPosition = tilePos * tileSize;
-            tilePosition = tilePos;
-            var resources = GetNearbyResourceCount();
-            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesGained { Count = resources });
-            GD.Print(GameState.BoardStore.State.ResourceCount);
+            GlobalPosition = tilePos * tileMap.CellSize;
+            SetTilePositionFromGlobalPosition();
         }
 
         private int GetNearbyResourceCount()
@@ -42,9 +49,9 @@ namespace Game
 
             if (tileMap == null) return sum;
 
-            for (int x = (int)tilePosition.x - Radius; x <= tilePosition.x + Radius; x++)
+            for (int x = (int)TilePosition.x - Radius; x <= TilePosition.x + Radius; x++)
             {
-                for (int y = (int)tilePosition.y - Radius; y <= tilePosition.y + Radius; y++)
+                for (int y = (int)TilePosition.y - Radius; y <= TilePosition.y + Radius; y++)
                 {
                     if (tileMap.GetCell(x, y) == 1)
                     {
