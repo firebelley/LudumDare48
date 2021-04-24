@@ -10,13 +10,15 @@ namespace Game.Level
     public class BaseLevel : Node
     {
         private const string INPUT_CLICK = "click";
+        private const string INPUT_CLICK_ALTERNATE = "click_alternate";
+        private const string INPUT_ESCAPE = "escape";
 
         [Node("Entities/TileMap")]
         public TileMap TileMap { get; private set; }
         [Node]
         private ResourcePreloader resourcePreloader;
         [Node]
-        private Node2D entities;
+        public Node2D Entities { get; private set; }
 
         [Export]
         private int startingResources = 5;
@@ -43,11 +45,14 @@ namespace Game.Level
                 GetTree().SetInputAsHandled();
                 GameState.BoardStore.DispatchAction(new BoardActions.TileClicked { Tile = GetHoveredTile() });
             }
-        }
-
-        public override void _Process(float delta)
-        {
-            SetPlacementValidity();
+            else if (evt.IsActionPressed(INPUT_CLICK_ALTERNATE) || evt.IsActionPressed(INPUT_ESCAPE))
+            {
+                if (GameState.BoardStore.State.SelectedBuildingInfo != null)
+                {
+                    GameState.BoardStore.DispatchAction(new BoardActions.BuildingDeselected());
+                    GetTree().SetInputAsHandled();
+                }
+            }
         }
 
         public bool CanDeleteBuilding(Building building)
@@ -62,17 +67,17 @@ namespace Game.Level
 
         public bool ShouldGoblinCampBeDisabled(GoblinCamp goblinCamp, Barracks excludeBarracks = null)
         {
-            var barracks = entities.GetNodesOfType<Barracks>().Where(x => x != excludeBarracks);
+            var barracks = Entities.GetNodesOfType<Barracks>().Where(x => x != excludeBarracks);
             return barracks.Any(x => GridUtils.IsPointWithinRadius(x.TilePosition, goblinCamp.TilePos, x.Radius));
         }
 
         private bool TowerHasBuildingsInRadius(Tower tower)
         {
-            var otherTowersInRadius = entities.GetNodesOfType<Tower>().Where(x => x != tower && GridUtils.IsPointWithinRadius(tower.TilePosition, x.TilePosition, tower.Radius));
+            var otherTowersInRadius = Entities.GetNodesOfType<Tower>().Where(x => x != tower && GridUtils.IsPointWithinRadius(tower.TilePosition, x.TilePosition, tower.Radius));
             var otherTowersConnected = otherTowersInRadius.All(x => otherTowersInRadius.Any(y => x != y && GridUtils.IsPointWithinRadius(x.TilePosition, y.TilePosition, x.Radius)));
             if (otherTowersInRadius.Count() > 1 && !otherTowersConnected) return true;
 
-            var buildingsInRadius = entities.GetNodesOfType<Building>()
+            var buildingsInRadius = Entities.GetNodesOfType<Building>()
                 .Where(x => !(x is Tower) && GridUtils.IsPointWithinRadius(tower.TilePosition, x.TilePosition, tower.Radius));
             if (!buildingsInRadius.Any()) return false;
 
@@ -82,65 +87,22 @@ namespace Game.Level
 
         private bool BarracksIsProtecting(Barracks barracks)
         {
-            var buildings = entities.GetNodesOfType<Building>().Where(x => x is not Barracks);
-            var otherBarracks = entities.GetNodesOfType<Barracks>().Where(x => x != barracks);
-            var disabledGoblinCamps = entities.GetNodesOfType<GoblinCamp>().Where(x => x.Disabled);
+            var buildings = Entities.GetNodesOfType<Building>().Where(x => x is not Barracks);
+            var otherBarracks = Entities.GetNodesOfType<Barracks>().Where(x => x != barracks);
+            var disabledGoblinCamps = Entities.GetNodesOfType<GoblinCamp>().Where(x => x.Disabled);
 
             if (!disabledGoblinCamps.Any(x => buildings.Any(y => GridUtils.IsPointWithinRadius(x.TilePos, y.TilePosition, GoblinCamp.RADIUS))))
             {
                 return false;
             }
 
-            var goblinCampsInRadius = entities.GetNodesOfType<GoblinCamp>().Where(x => GridUtils.IsPointWithinRadius(x.TilePos, barracks.TilePosition, barracks.Radius));
+            var goblinCampsInRadius = Entities.GetNodesOfType<GoblinCamp>().Where(x => GridUtils.IsPointWithinRadius(x.TilePos, barracks.TilePosition, barracks.Radius));
             return goblinCampsInRadius.Any() && !goblinCampsInRadius.All(camp => otherBarracks.Any(other => GridUtils.IsPointWithinRadius(other.TilePosition, camp.TilePos, other.Radius)));
         }
 
         private Vector2 GetHoveredTile()
         {
             return TileMap.WorldToMap(TileMap.GetGlobalMousePosition());
-        }
-
-        private void SetPlacementValidity()
-        {
-            var selectedBuilding = GameState.BoardStore.State.SelectedBuildingInfo;
-            if (selectedBuilding == null) return;
-
-            var hoveredTile = GameState.BoardStore.State.HoveredTile;
-            var valid = true;
-
-            if (TileMap.GetCellv(hoveredTile) != 0)
-            {
-                valid = false;
-            }
-
-            if (selectedBuilding.Cost > GameState.BoardStore.State.ResourcesAvailable)
-            {
-                valid = false;
-            }
-
-            var towers = entities.GetNodesOfType<Tower>();
-            var hasProximityToTower = towers.Any(x => GridUtils.IsPointWithinRadius(x.TilePosition, hoveredTile, x.Radius));
-
-            if (!hasProximityToTower)
-            {
-                valid = false;
-            }
-
-            var isWithinGoblinCamp = entities.GetNodesOfType<GoblinCamp>().Any(x =>
-                !x.Disabled && GridUtils.IsPointWithinRadius(x.TilePos, hoveredTile, GoblinCamp.RADIUS)
-            );
-            if (isWithinGoblinCamp && selectedBuilding.Type != typeof(Barracks))
-            {
-                valid = false;
-            }
-
-            var isOccupied = entities.GetNodesOfType<Building>().Any(x => x.TilePosition == hoveredTile);
-            if (isOccupied)
-            {
-                valid = false;
-            }
-
-            GameState.BoardStore.DispatchAction(new BoardActions.SetPlacementValid { Valid = valid });
         }
 
         private void HandleTileClick(Vector2 tile)
@@ -151,7 +113,7 @@ namespace Game.Level
 
             var building = GD.Load<PackedScene>(GameState.BoardStore.State.SelectedBuildingInfo.ScenePath).InstanceOrNull<Building>();
             building.GlobalPosition = tile * TileMap.CellSize;
-            entities.AddChild(building);
+            Entities.AddChild(building);
             GameState.BoardStore.DispatchAction(new BoardActions.BuildingDeselected());
         }
 
@@ -162,7 +124,7 @@ namespace Game.Level
 
         private void TowerPlacedEffect(BoardActions.TowerPlaced towerPlaced)
         {
-            var goal = entities.GetFirstNodeOfType<Goal>();
+            var goal = Entities.GetFirstNodeOfType<Goal>();
             if (goal != null && GridUtils.IsPointWithinRadius(towerPlaced.Tower.TilePosition, goal.TilePosition, towerPlaced.Tower.Radius))
             {
                 GD.Print("complete");
