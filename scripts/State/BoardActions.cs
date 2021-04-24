@@ -25,7 +25,17 @@ namespace Game.State
             public List<Vector2> Tiles = new();
         }
 
+        public class ResourcesUnharvested : BaseAction
+        {
+            public List<Vector2> Tiles = new();
+        }
+
         public class ResourcesSpent : BaseAction
+        {
+            public int Count;
+        }
+
+        public class ResourcesRecovered : BaseAction
         {
             public int Count;
         }
