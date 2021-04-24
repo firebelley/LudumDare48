@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Game.State;
 using Godot;
 using GodotUtilities;
+using Game.Level;
 
 namespace Game.GameObject
 {

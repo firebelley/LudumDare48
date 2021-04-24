@@ -6,7 +6,7 @@ using Game.Util;
 using Godot;
 using GodotUtilities;
 
-namespace Game
+namespace Game.Level
 {
     public class BaseLevel : Node
     {
