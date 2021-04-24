@@ -77,8 +77,9 @@ namespace Game.UI
             var isWithinGoblinCamp = baseLevel.Entities.GetNodesOfType<GoblinCamp>().Any(x =>
                 !x.Disabled && GridUtils.IsPointWithinRadius(x.TilePos, tile, GoblinCamp.RADIUS)
             );
+            var isOnGoblinCamp = baseLevel.Entities.GetNodesOfType<GoblinCamp>().Any(x => x.TilePos == tile);
             var selectedBuilding = GameState.BoardStore.State.SelectedBuildingInfo;
-            if (isWithinGoblinCamp && selectedBuilding.Type != typeof(Barracks))
+            if (isOnGoblinCamp || (isWithinGoblinCamp && selectedBuilding.Type != typeof(Barracks)))
             {
                 valid = false;
             }
