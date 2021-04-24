@@ -4,7 +4,9 @@
 
 [node name="BuildingGhost" type="Node"]
 script = ExtResource( 1 )
+validColor = Color( 1, 1, 1, 0.572549 )
+invalidColor = Color( 1, 0, 0, 1 )
 
 [node name="Ghost" type="Sprite" parent="."]
-modulate = Color( 1, 1, 1, 0.533333 )
+modulate = Color( 1, 1, 1, 0.619608 )
 centered = false
