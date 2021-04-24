@@ -39,6 +39,7 @@ namespace Game.Level
             GameState.CreateEffect<BoardActions.ResourcesUnharvested>(this, nameof(ResourcesUnharvestedEffect));
             GameState.CreateEffect<BoardActions.ResourcesSpent>(this, nameof(ResourcesSpentEffect));
             GameState.CreateEffect<BoardActions.ResourcesRecovered>(this, nameof(ResourcesRecoveredEffect));
+            GameState.CreateEffect<BoardActions.TowerPlaced>(this, nameof(TowerPlacedEffect));
             GameState.BoardStore.DispatchAction(new BoardActions.SetBaseResourceCount { Count = startingResources });
             selectVillageButton.Connect("pressed", this, nameof(OnSelectVillagePressed));
             selectTowerButton.Connect("pressed", this, nameof(OnSelectTowerPressed));
@@ -224,6 +225,15 @@ namespace Game.Level
         private void ResourcesRecoveredEffect(object _)
         {
             UpdateResourceCount();
+        }
+
+        private void TowerPlacedEffect(BoardActions.TowerPlaced towerPlaced)
+        {
+            var goal = entities.GetFirstNodeOfType<Goal>();
+            if (goal != null && GridUtils.IsPointWithinRadius(towerPlaced.Tower.TilePosition, goal.TilePosition, towerPlaced.Tower.Radius))
+            {
+                GD.Print("complete");
+            }
         }
     }
 }
