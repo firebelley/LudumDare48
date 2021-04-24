@@ -30,9 +30,10 @@ namespace Game.UI
 
         private void UpdateTileMap()
         {
-            foreach (var tower in baseLevel.Entities.GetNodesOfType<Tower>())
+            var boundaryEntites = baseLevel.Entities.GetNodesOfType<Building>().Where(x => x is Tower || x is MainBuilding);
+            foreach (var building in boundaryEntites)
             {
-                GridUtils.ForEachTileInRadius(tower.TilePosition, tower.Radius, (tile) =>
+                GridUtils.ForEachTileInRadius(building.TilePosition, building.Radius, (tile) =>
                 {
                     if (baseLevel.TileMap.GetCellv(tile) == 0)
                     {
@@ -66,8 +67,9 @@ namespace Game.UI
 
             var towers = baseLevel.Entities.GetNodesOfType<Tower>();
             var hasProximityToTower = towers.Any(x => GridUtils.IsPointWithinRadius(x.TilePosition, tile, x.Radius));
-
-            if (!hasProximityToTower)
+            var main = baseLevel.Entities.GetNodesOfType<MainBuilding>();
+            var hasProximityToMain = main.Any(x => GridUtils.IsPointWithinRadius(x.TilePosition, tile, x.Radius));
+            if (!hasProximityToMain && !hasProximityToTower)
             {
                 return false;
             }

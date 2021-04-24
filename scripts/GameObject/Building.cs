@@ -20,6 +20,8 @@ namespace Game.GameObject
         public int ResourceCost { get; private set; } = 2;
         [Export]
         public Texture GhostTexture { get; private set; }
+        [Export]
+        public bool Deletable { get; private set; } = true;
 
         protected TileMap tileMap;
 
@@ -52,7 +54,7 @@ namespace Game.GameObject
 
         private void OnAreaInputEvent(object _, InputEvent inputEvent, object __)
         {
-            if (inputEvent.IsActionPressed(INPUT_CLICK_ALTERNATE))
+            if (inputEvent.IsActionPressed(INPUT_CLICK_ALTERNATE) && Deletable)
             {
                 var canDelete = this.GetAncestor<BaseLevel>()?.CanDeleteBuilding(this) ?? false;
                 if (canDelete)

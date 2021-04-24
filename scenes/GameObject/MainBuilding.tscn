@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/GameObject/Building.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/buildings/main/main.png" type="Texture" id=2]
+[ext_resource path="res://scripts/GameObject/MainBuilding.cs" type="Script" id=3]
+
+[node name="MainBuilding" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+Radius = 2
+ResourceCost = 0
+GhostTexture = ExtResource( 2 )
+Deletable = false
+
+[node name="AnimationPlayer" parent="." index="0"]
+autoplay = ""
+
+[node name="Sprite" parent="." index="1"]
+modulate = Color( 1, 1, 1, 1 )
+position = Vector2( 16, 16 )
+texture = ExtResource( 2 )
