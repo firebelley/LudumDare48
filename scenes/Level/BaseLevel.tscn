@@ -19,12 +19,13 @@ resources = [ PoolStringArray( "Barracks", "Tower", "Village" ), [ ExtResource( 
 
 [node name="LevelCamera" parent="." instance=ExtResource( 6 )]
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="Entities" type="YSort" parent="."]
+
+[node name="TileMap" type="TileMap" parent="Entities"]
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )
+cell_y_sort = true
 format = 1
-
-[node name="Entities" type="Node2D" parent="."]
 
 [node name="BuildingGhost" parent="." instance=ExtResource( 4 )]
 
@@ -70,3 +71,5 @@ align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="YSort" type="YSort" parent="."]

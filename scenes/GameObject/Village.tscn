@@ -2,13 +2,13 @@
 
 [ext_resource path="res://scenes/GameObject/Building.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/GameObject/Village.cs" type="Script" id=2]
-[ext_resource path="res://assets/placeholder-building.png" type="Texture" id=3]
+[ext_resource path="res://assets/buildings/village/village.png" type="Texture" id=4]
 
 [node name="Village" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 Radius = 2
 ResourceCost = 3
-GhostTexture = ExtResource( 3 )
+GhostTexture = ExtResource( 4 )
 
 [node name="Sprite" parent="." index="0"]
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
