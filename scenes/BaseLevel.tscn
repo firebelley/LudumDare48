@@ -1,13 +1,15 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://resources/tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://scripts/BaseLevel.cs" type="Script" id=2]
 [ext_resource path="res://scenes/GameObject/Building.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/UI/BuildingGhost.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/Util/MouseDispatcher.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/GameObject/GoblinCamp.tscn" type="PackedScene" id=6]
 
 [node name="BaseLevel" type="Node"]
 script = ExtResource( 2 )
+startingResources = 100
 
 [node name="ResourcePreloader" type="ResourcePreloader" parent="."]
 resources = [ PoolStringArray( "Building" ), [ ExtResource( 3 ) ] ]
@@ -28,6 +30,9 @@ tile_data = PoolIntArray( 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 
 
 [node name="Building" parent="Entities" instance=ExtResource( 3 )]
 position = Vector2( 32, 128 )
+
+[node name="GoblinCamp" parent="Entities" instance=ExtResource( 6 )]
+position = Vector2( 160, 160 )
 
 [node name="BuildingGhost" parent="." instance=ExtResource( 4 )]
 

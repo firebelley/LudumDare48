@@ -1,6 +1,8 @@
 using System.Linq;
 using Game.Data;
+using Game.GameObject;
 using Game.State;
+using Game.Util;
 using Godot;
 using GodotUtilities;
 
@@ -68,17 +70,21 @@ namespace Game
             }
 
             var buildings = entities.GetNodesOfType<Building>();
-            var hasProximityToBuilding = buildings.Any(x =>
-            {
-                var absX = (int)Mathf.Abs(x.TilePosition.x - hoveredTile.x);
-                var absY = (int)Mathf.Abs(x.TilePosition.y - hoveredTile.y);
-                return absX <= selectedBuilding.Radius && absY <= selectedBuilding.Radius;
-            });
+            var hasProximityToBuilding = buildings.Any(x => GridUtils.IsPointWithinRadius(x.TilePosition, hoveredTile, x.Radius));
 
             if (!hasProximityToBuilding)
             {
                 valid = false;
             }
+
+            var isWithinGoblinCamp = entities.GetNodesOfType<GoblinCamp>().Any(x =>
+                !x.Disabled && GridUtils.IsPointWithinRadius(x.TilePos, hoveredTile, GoblinCamp.RADIUS)
+            );
+            if (isWithinGoblinCamp)
+            {
+                valid = false;
+            }
+
             GameState.BoardStore.DispatchAction(new BoardActions.SetPlacementValid { Valid = valid });
         }
 

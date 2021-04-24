@@ -10,5 +10,6 @@ namespace Game.State
         public int ResourceCount;
         public Vector2 HoveredTile;
         public bool TilePlacementValid;
+        public bool CanPlaceInGoblinCamp;
     }
 }
