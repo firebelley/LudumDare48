@@ -24,7 +24,12 @@ namespace Game.GameObject
 
         public override void _Ready()
         {
-            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesSpent { Count = ResourceCost });
+            if (Owner == null)
+            {
+
+                GameState.BoardStore.DispatchAction(new BoardActions.ResourcesSpent { Count = ResourceCost });
+            }
+
             SetTilePositionFromGlobalPosition();
         }
 

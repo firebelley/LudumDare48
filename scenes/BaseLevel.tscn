@@ -11,7 +11,6 @@
 
 [node name="BaseLevel" type="Node"]
 script = ExtResource( 2 )
-startingResources = 100
 
 [node name="ResourcePreloader" type="ResourcePreloader" parent="."]
 resources = [ PoolStringArray( "Barracks", "Tower", "Village" ), [ ExtResource( 8 ), ExtResource( 3 ), ExtResource( 7 ) ] ]
@@ -71,3 +70,12 @@ margin_top = 48.0
 margin_right = 66.0
 margin_bottom = 68.0
 text = "Barracks"
+
+[node name="ResourcesLabel" type="Label" parent="CanvasLayer/Control"]
+anchor_right = 1.0
+margin_bottom = 14.0
+text = "Resources: {0}"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
