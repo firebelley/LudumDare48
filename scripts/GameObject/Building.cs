@@ -15,7 +15,7 @@ namespace Game
         [Export]
         public Texture GhostTexture { get; private set; }
 
-        private TileMap tileMap;
+        protected TileMap tileMap;
 
         public override void _EnterTree()
         {
@@ -31,9 +31,7 @@ namespace Game
         public void SetTilePositionFromGlobalPosition()
         {
             TilePosition = tileMap.WorldToMap(GlobalPosition);
-            var resources = GetNearbyResourceCount();
-            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesGained { Count = resources });
-            GD.Print(GameState.BoardStore.State.ResourceCount);
+            Placed();
         }
 
         public void SetTilePosition(Vector2 tilePos)
@@ -42,25 +40,6 @@ namespace Game
             SetTilePositionFromGlobalPosition();
         }
 
-        private int GetNearbyResourceCount()
-        {
-            var tileMap = this.GetAncestor<BaseLevel>().TileMap;
-            var sum = 0;
-
-            if (tileMap == null) return sum;
-
-            for (int x = (int)TilePosition.x - Radius; x <= TilePosition.x + Radius; x++)
-            {
-                for (int y = (int)TilePosition.y - Radius; y <= TilePosition.y + Radius; y++)
-                {
-                    if (tileMap.GetCell(x, y) == 1)
-                    {
-                        sum++;
-                    }
-                }
-            }
-
-            return sum;
-        }
+        protected virtual void Placed() { }
     }
 }
