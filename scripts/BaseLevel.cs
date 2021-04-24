@@ -20,6 +20,8 @@ namespace Game
         private Node2D entities;
         [Node("CanvasLayer/Control/VBoxContainer/SelectVillageButton")]
         private Button selectVillageButton;
+        [Node("CanvasLayer/Control/VBoxContainer/SelectTowerButton")]
+        private Button selectTowerButton;
 
         [Export]
         private int startingResources = 5;
@@ -29,8 +31,9 @@ namespace Game
             this.WireNodes();
             GameState.BoardStore.Reset();
             GameState.CreateEffect<BoardActions.TileClicked>(this, nameof(TileClickedEffect));
-            selectVillageButton.Connect("pressed", this, nameof(OnSelectVillagePressed));
             GameState.BoardStore.DispatchAction(new BoardActions.ResourcesGained { Count = startingResources });
+            selectVillageButton.Connect("pressed", this, nameof(OnSelectVillagePressed));
+            selectTowerButton.Connect("pressed", this, nameof(OnSelectTowerPressed));
         }
 
         public override void _UnhandledInput(InputEvent evt)
@@ -103,6 +106,17 @@ namespace Game
         private void OnSelectVillagePressed()
         {
             var building = resourcePreloader.InstanceSceneOrNull<Village>();
+            OnBuildingPressed(building);
+        }
+
+        private void OnSelectTowerPressed()
+        {
+            var building = resourcePreloader.InstanceSceneOrNull<Tower>();
+            OnBuildingPressed(building);
+        }
+
+        private void OnBuildingPressed(Building building)
+        {
             GameState.BoardStore.DispatchAction(new BoardActions.BuildingSelected
             {
                 SelectedBuildingInfo = SelectedBuildingInfo.FromBuilding(building)
