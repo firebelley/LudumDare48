@@ -1,3 +1,4 @@
+using Game.Effect;
 using Game.Level;
 using Game.State;
 using Godot;
@@ -13,6 +14,8 @@ namespace Game.GameObject
 
         [Node]
         protected Area2D area2D;
+        [Node]
+        protected ResourcePreloader resourcePreloader;
 
         [Export]
         public int Radius { get; private set; } = 1;
@@ -61,6 +64,10 @@ namespace Game.GameObject
                 {
                     GameState.BoardStore.DispatchAction(new BoardActions.ResourcesRecovered { Count = ResourceCost });
                     Destroyed();
+                    var destruction = resourcePreloader.InstanceSceneOrNull<BuildingDestruction>();
+                    GetParent().AddChild(destruction);
+                    destruction.GlobalPosition = GlobalPosition;
+                    destruction.Texture = GhostTexture;
                     QueueFree();
                 }
             }
