@@ -17,6 +17,7 @@ namespace Game.GameObject
         {
             this.WireNodes();
             GameState.CreateEffect<BoardActions.BarracksPlaced>(this, nameof(BarracksPlacedEffect));
+            GameState.CreateEffect<BoardActions.BarracksRemoved>(this, nameof(BarracksRemovedEffect));
         }
 
         public override void _Ready()
@@ -26,11 +27,14 @@ namespace Game.GameObject
 
         private void BarracksPlacedEffect(BoardActions.BarracksPlaced barracksPlaced)
         {
-            if (GridUtils.IsPointWithinRadius(TilePos, barracksPlaced.Barracks.TilePosition, barracksPlaced.Barracks.Radius))
-            {
-                Disabled = true;
-                Modulate = Colors.Transparent;
-            }
+            Disabled = this.GetAncestor<BaseLevel>().ShouldGoblinCampBeDisabled(this);
+            Modulate = Disabled ? Colors.Transparent : Colors.White;
+        }
+
+        private void BarracksRemovedEffect(BoardActions.BarracksRemoved barracksRemoved)
+        {
+            Disabled = this.GetAncestor<BaseLevel>().ShouldGoblinCampBeDisabled(this, barracksRemoved.Barracks);
+            Modulate = Disabled ? Colors.Transparent : Colors.White;
         }
     }
 }
