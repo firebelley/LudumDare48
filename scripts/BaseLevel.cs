@@ -1,3 +1,4 @@
+using Game.Data;
 using Game.State;
 using Godot;
 using GodotUtilities;
@@ -38,27 +39,52 @@ namespace Game
             }
         }
 
+        public override void _Process(float delta)
+        {
+            SetPlacementValidity();
+        }
+
         private Vector2 GetHoveredTile()
         {
             return TileMap.WorldToMap(TileMap.GetGlobalMousePosition());
         }
 
+        private void SetPlacementValidity()
+        {
+            if (GameState.BoardStore.State.SelectedBuildingInfo == null) return;
+            var hoveredTile = GameState.BoardStore.State.HoveredTile;
+            var valid = true;
+            if (TileMap.GetCellv(hoveredTile) != 0)
+            {
+                valid = false;
+            }
+
+            if (valid != GameState.BoardStore.State.TilePlacementValid)
+            {
+                GameState.BoardStore.DispatchAction(new BoardActions.SetPlacementValid { Valid = valid });
+            }
+        }
+
         private void HandleTileClick(Vector2 tile)
         {
             if (TileMap.GetCellv(tile) == -1) return;
+            if (GameState.BoardStore.State.SelectedBuildingInfo == null) return;
+            if (!GameState.BoardStore.State.TilePlacementValid) return;
 
-            if (GameState.BoardStore.State.BuildingSelected)
-            {
-                var building = resourcePreloader.InstanceSceneOrNull<Building>();
-                entities.AddChild(building);
-                building.SetTilePosition(tile);
-                GameState.BoardStore.DispatchAction(new BoardActions.BuildingDeselected());
-            }
+            var building = GD.Load<PackedScene>(GameState.BoardStore.State.SelectedBuildingInfo.ScenePath).InstanceOrNull<Building>();
+            entities.AddChild(building);
+            building.SetTilePosition(tile);
+            GameState.BoardStore.DispatchAction(new BoardActions.BuildingDeselected());
         }
 
         private void OnSelectVillagePressed()
         {
-            GameState.BoardStore.DispatchAction(new BoardActions.BuildingSelected());
+            var building = resourcePreloader.InstanceSceneOrNull<Building>();
+            GameState.BoardStore.DispatchAction(new BoardActions.BuildingSelected
+            {
+                SelectedBuildingInfo = SelectedBuildingInfo.FromBuilding(building)
+            });
+            building.QueueFree();
         }
 
         private void TileClickedEffect(BoardActions.TileClicked tileClicked)

@@ -9,6 +9,11 @@ namespace Game.UI
         [Node]
         private Sprite ghost;
 
+        [Export]
+        private Color validColor;
+        [Export]
+        private Color invalidColor;
+
         private TileMap tileMap;
 
         public override void _EnterTree()
@@ -17,6 +22,7 @@ namespace Game.UI
             tileMap = this.GetAncestor<BaseLevel>().TileMap;
             GameState.CreateEffect<BoardActions.BuildingSelected>(this, nameof(BuildingSelectedEffect));
             GameState.CreateEffect<BoardActions.BuildingDeselected>(this, nameof(BuildingDeselectedEffect));
+            GameState.CreateEffect<BoardActions.SetPlacementValid>(this, nameof(SetPlacementValidEffect));
         }
 
         public override void _Process(float delta)
@@ -31,12 +37,18 @@ namespace Game.UI
 
         private void BuildingSelectedEffect(object _)
         {
-            ghost.Texture = GD.Load<Texture>("res://assets/placeholder-building.png");
+            ghost.Texture = GameState.BoardStore.State.SelectedBuildingInfo?.Texture;
         }
 
         private void BuildingDeselectedEffect(object _)
         {
             ghost.Texture = null;
+        }
+
+        private void SetPlacementValidEffect(object _)
+        {
+            var valid = GameState.BoardStore.State.TilePlacementValid;
+            ghost.Modulate = valid ? validColor : invalidColor;
         }
     }
 }

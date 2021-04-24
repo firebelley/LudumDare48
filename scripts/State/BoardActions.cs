@@ -1,3 +1,4 @@
+using Game.Data;
 using Godot;
 using GodotUtilities.StateManagement;
 
@@ -7,13 +8,10 @@ namespace Game.State
     {
         public class BuildingSelected : BaseAction
         {
-
+            public SelectedBuildingInfo SelectedBuildingInfo;
         }
 
-        public class BuildingDeselected : BaseAction
-        {
-
-        }
+        public class BuildingDeselected : BaseAction { }
 
         public class ResourcesGained : BaseAction
         {
@@ -28,6 +26,16 @@ namespace Game.State
         public class TileClicked : BaseAction
         {
             public Vector2 Tile;
+        }
+
+        public class TileHovered : BaseAction
+        {
+            public Vector2 Tile;
+        }
+
+        public class SetPlacementValid : BaseAction
+        {
+            public bool Valid;
         }
     }
 }

@@ -10,9 +10,11 @@ namespace Game
         private Vector2 tileSize;
 
         [Export]
-        protected int radius = 1;
+        public int Radius { get; private set; } = 1;
         [Export]
-        private int resourceCost = 2;
+        public int ResourceCost { get; private set; } = 2;
+        [Export]
+        public Texture GhostTexture { get; private set; }
 
         public override void _EnterTree()
         {
@@ -21,7 +23,7 @@ namespace Game
 
         public override void _Ready()
         {
-            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesSpent { Count = resourceCost });
+            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesSpent { Count = ResourceCost });
         }
 
         public void SetTilePosition(Vector2 tilePos)
@@ -40,9 +42,9 @@ namespace Game
 
             if (tileMap == null) return sum;
 
-            for (int x = (int)tilePosition.x - radius; x <= tilePosition.x + radius; x++)
+            for (int x = (int)tilePosition.x - Radius; x <= tilePosition.x + Radius; x++)
             {
-                for (int y = (int)tilePosition.y - radius; y <= tilePosition.y + radius; y++)
+                for (int y = (int)tilePosition.y - Radius; y <= tilePosition.y + Radius; y++)
                 {
                     if (tileMap.GetCell(x, y) == 1)
                     {
