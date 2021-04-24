@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://resources/tiles.tres" type="TileSet" id=1]
-[ext_resource path="res://scripts/BaseLevel.cs" type="Script" id=2]
+[ext_resource path="res://scripts/Level/BaseLevel.cs" type="Script" id=2]
 [ext_resource path="res://scenes/GameObject/Tower.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/UI/BuildingGhost.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/Util/MouseDispatcher.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/GameObject/GoblinCamp.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/GameObject/Village.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/GameObject/Barracks.tscn" type="PackedScene" id=8]
 
@@ -18,22 +17,14 @@ resources = [ PoolStringArray( "Barracks", "Tower", "Village" ), [ ExtResource( 
 [node name="MouseDispatcher" parent="." instance=ExtResource( 5 )]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 160, 112 )
 current = true
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )
 format = 1
-tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 0, -65535, 0, 0, -65534, 0, 0, -65533, 0, 0, -65532, 0, 0, -65531, 0, 0, -65530, 0, 0, -65529, 0, 0, -65528, 0, 0, -65527, 0, 0, -65526, 0, 0, -65525, 0, 0, -65524, 0, 0, 65535, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 1, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 131071, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 0, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 0, 0, 65546, 0, 0, 65547, 0, 0, 65548, 0, 0, 196607, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 1, 0, 131077, 1, 0, 131078, 1, 0, 131079, 0, 0, 131080, 1, 0, 131081, 1, 0, 131082, 0, 0, 131083, 0, 0, 131084, 0, 0, 262143, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 196613, 1, 0, 196614, 1, 0, 196615, 1, 0, 196616, 1, 0, 196617, 0, 0, 196618, 0, 0, 196619, 0, 0, 196620, 0, 0, 327679, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 1, 0, 262151, 1, 0, 262152, 0, 0, 262153, 0, 0, 262154, 0, 0, 262155, 0, 0, 262156, 0, 0, 393215, 0, 0, 327680, 1, 0, 327681, 1, 0, 327682, 1, 0, 327683, 1, 0, 327684, 0, 0, 327685, 0, 0, 327686, 0, 0, 327687, 0, 0, 327688, 0, 0, 327689, 0, 0, 327690, 0, 0, 327691, 0, 0, 327692, 0, 0, 458751, 0, 0, 393216, 1, 0, 393217, 1, 0, 393218, 1, 0, 393219, 0, 0, 393220, 0, 0, 393221, 0, 0, 393222, 0, 0, 393223, 0, 0, 393224, 0, 0, 393225, 0, 0, 393226, 0, 0, 393227, 0, 0, 393228, 0, 0, 524287, 0, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0 )
 
 [node name="Entities" type="Node2D" parent="."]
-
-[node name="GoblinCamp" parent="Entities" instance=ExtResource( 6 )]
-position = Vector2( 128, 128 )
-
-[node name="Village" parent="Entities" instance=ExtResource( 7 )]
-position = Vector2( 0, 64 )
 
 [node name="BuildingGhost" parent="." instance=ExtResource( 4 )]
 
