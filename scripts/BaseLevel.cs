@@ -24,6 +24,8 @@ namespace Game
         private Button selectTowerButton;
         [Node("CanvasLayer/Control/VBoxContainer/SelectBarracksButton")]
         private Button selectBarracksButton;
+        [Node("CanvasLayer/Control/ResourcesLabel")]
+        private Label resourcesLabel;
 
         [Export]
         private int startingResources = 5;
@@ -33,6 +35,8 @@ namespace Game
             this.WireNodes();
             GameState.BoardStore.Reset();
             GameState.CreateEffect<BoardActions.TileClicked>(this, nameof(TileClickedEffect));
+            GameState.CreateEffect<BoardActions.ResourcesGained>(this, nameof(ResourcesGainedEffect));
+            GameState.CreateEffect<BoardActions.ResourcesSpent>(this, nameof(ResourcesSpentEffect));
             GameState.BoardStore.DispatchAction(new BoardActions.ResourcesGained { Count = startingResources });
             selectVillageButton.Connect("pressed", this, nameof(OnSelectVillagePressed));
             selectTowerButton.Connect("pressed", this, nameof(OnSelectTowerPressed));
@@ -106,6 +110,11 @@ namespace Game
             GameState.BoardStore.DispatchAction(new BoardActions.BuildingDeselected());
         }
 
+        private void UpdateResourceCount()
+        {
+            resourcesLabel.Text = $"Resources: {GameState.BoardStore.State.ResourceCount}";
+        }
+
         private void OnSelectVillagePressed()
         {
             var building = resourcePreloader.InstanceSceneOrNull<Village>();
@@ -136,6 +145,16 @@ namespace Game
         private void TileClickedEffect(BoardActions.TileClicked tileClicked)
         {
             HandleTileClick(tileClicked.Tile);
+        }
+
+        private void ResourcesGainedEffect(object _)
+        {
+            UpdateResourceCount();
+        }
+
+        private void ResourcesSpentEffect(object _)
+        {
+            UpdateResourceCount();
         }
     }
 }
