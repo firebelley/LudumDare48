@@ -1,3 +1,4 @@
+using System.Linq;
 using Game.Data;
 using Game.State;
 using Godot;
@@ -51,7 +52,9 @@ namespace Game
 
         private void SetPlacementValidity()
         {
-            if (GameState.BoardStore.State.SelectedBuildingInfo == null) return;
+            var selectedBuilding = GameState.BoardStore.State.SelectedBuildingInfo;
+            if (selectedBuilding == null) return;
+
             var hoveredTile = GameState.BoardStore.State.HoveredTile;
             var valid = true;
             if (TileMap.GetCellv(hoveredTile) != 0)
@@ -59,10 +62,24 @@ namespace Game
                 valid = false;
             }
 
-            if (valid != GameState.BoardStore.State.TilePlacementValid)
+            if (selectedBuilding.Cost > GameState.BoardStore.State.ResourceCount)
             {
-                GameState.BoardStore.DispatchAction(new BoardActions.SetPlacementValid { Valid = valid });
+                valid = false;
             }
+
+            var buildings = entities.GetNodesOfType<Building>();
+            var hasProximityToBuilding = buildings.Any(x =>
+            {
+                var absX = (int)Mathf.Abs(x.TilePosition.x - hoveredTile.x);
+                var absY = (int)Mathf.Abs(x.TilePosition.y - hoveredTile.y);
+                return absX <= selectedBuilding.Radius && absY <= selectedBuilding.Radius;
+            });
+
+            if (!hasProximityToBuilding)
+            {
+                valid = false;
+            }
+            GameState.BoardStore.DispatchAction(new BoardActions.SetPlacementValid { Valid = valid });
         }
 
         private void HandleTileClick(Vector2 tile)
