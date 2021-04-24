@@ -7,8 +7,8 @@
 [node name="Tower" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 Radius = 3
-ResourceCost = 5
+ResourceCost = 4
 GhostTexture = ExtResource( 4 )
 
-[node name="Sprite" parent="." index="0"]
+[node name="Sprite" parent="." index="2"]
 texture = ExtResource( 4 )
