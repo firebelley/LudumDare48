@@ -64,5 +64,10 @@ namespace Game.State
         {
             public Barracks Barracks;
         }
+
+        public class TowerPlaced : BaseAction
+        {
+            public Tower Tower;
+        }
     }
 }

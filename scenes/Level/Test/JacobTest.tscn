@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/Level/BaseLevel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/GameObject/Tower.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/GameObject/GoblinCamp.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/GameObject/Goal.tscn" type="PackedScene" id=4]
 
 [node name="JacobTest" instance=ExtResource( 1 )]
 startingResources = 100
@@ -18,3 +19,6 @@ position = Vector2( 0, 64 )
 
 [node name="Tower" parent="Entities" index="2" instance=ExtResource( 2 )]
 position = Vector2( -224, 32 )
+
+[node name="Goal" parent="Entities" index="3" instance=ExtResource( 4 )]
+position = Vector2( -64, -96 )
