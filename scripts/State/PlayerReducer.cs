@@ -1,4 +1,3 @@
-using Godot;
 using GodotUtilities.StateManagement;
 
 namespace Game.State
@@ -11,7 +10,6 @@ namespace Game.State
             {
                 case PlayerActions.PositionUpdated positionUpdated:
                     state.Position = positionUpdated.Position;
-                    GD.Print(state.Position);
                     break;
             }
         }

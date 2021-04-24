@@ -13,6 +13,17 @@ namespace Game.GameObject
             base.Placed();
             var resourceTiles = GetNearbyResourceTiles();
             GameState.BoardStore.DispatchAction(new BoardActions.ResourcesHarvested { Tiles = resourceTiles });
+            GD.Print(GameState.BoardStore.State.ConsumedResourceTiles.Keys.Count);
+            GD.Print(resourceTiles.Count);
+        }
+
+        protected override void Destroyed()
+        {
+            base.Destroyed();
+            var resourceTiles = GetNearbyResourceTiles();
+            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesUnharvested { Tiles = resourceTiles });
+            GD.Print(GameState.BoardStore.State.ConsumedResourceTiles.Keys.Count);
+            GD.Print(resourceTiles.Count);
         }
 
         private List<Vector2> GetNearbyResourceTiles()

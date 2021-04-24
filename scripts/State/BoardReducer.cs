@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Godot;
 using GodotUtilities.StateManagement;
 
 namespace Game.State
@@ -18,17 +20,16 @@ namespace Game.State
                     state.BaseResourceCount = baseResourceCount.Count;
                     break;
                 case BoardActions.ResourcesHarvested resourcesHarvested:
-                    foreach (var tile in resourcesHarvested.Tiles)
-                    {
-                        if (!state.ConsumedResourceTiles.ContainsKey(tile))
-                        {
-                            state.ConsumedResourceTiles[tile] = 0;
-                        }
-                        state.ConsumedResourceTiles[tile]++;
-                    }
+                    ChangeResourceHarvestStatus(state, resourcesHarvested.Tiles, 1);
+                    break;
+                case BoardActions.ResourcesUnharvested resourcesUnharvested:
+                    ChangeResourceHarvestStatus(state, resourcesUnharvested.Tiles, -1);
                     break;
                 case BoardActions.ResourcesSpent resourcesSpent:
                     state.ResourcesSpent += resourcesSpent.Count;
+                    break;
+                case BoardActions.ResourcesRecovered resourceRecovered:
+                    state.ResourcesSpent -= resourceRecovered.Count;
                     break;
                 case BoardActions.TileHovered tileHovered:
                     state.HoveredTile = tileHovered.Tile;
@@ -39,6 +40,23 @@ namespace Game.State
                 case BoardActions.SetPlacementValid placementValid:
                     state.TilePlacementValid = placementValid.Valid;
                     break;
+            }
+        }
+
+        private void ChangeResourceHarvestStatus(BoardState state, List<Vector2> resourceTiles, int change)
+        {
+            foreach (var tile in resourceTiles)
+            {
+                if (!state.ConsumedResourceTiles.ContainsKey(tile))
+                {
+                    state.ConsumedResourceTiles[tile] = 0;
+                }
+
+                state.ConsumedResourceTiles[tile] += change;
+                if (state.ConsumedResourceTiles[tile] <= 0)
+                {
+                    state.ConsumedResourceTiles.Remove(tile);
+                }
             }
         }
     }

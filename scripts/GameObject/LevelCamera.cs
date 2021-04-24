@@ -24,11 +24,6 @@ namespace Game
                 Position = boundingRect.Position * tileMap.CellSize,
                 Size = boundingRect.Size * tileMap.CellSize,
             };
-
-            // LimitBottom = (int)((rect.Position.y + rect.Size.y) * tileMap.CellSize.y);
-            // LimitTop = (int)(rect.Position.y * tileMap.CellSize.y);
-            // LimitLeft = (int)(rect.Position.x * tileMap.CellSize.x);
-            // LimitRight = (int)((rect.Position.x + rect.Size.x) * tileMap.CellSize.x);
         }
 
         public override void _Process(float delta)

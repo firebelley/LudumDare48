@@ -36,11 +36,18 @@ namespace Game.Level
             GameState.BoardStore.Reset();
             GameState.CreateEffect<BoardActions.TileClicked>(this, nameof(TileClickedEffect));
             GameState.CreateEffect<BoardActions.ResourcesHarvested>(this, nameof(ResourcesHarvestedEffect));
+            GameState.CreateEffect<BoardActions.ResourcesUnharvested>(this, nameof(ResourcesUnharvestedEffect));
             GameState.CreateEffect<BoardActions.ResourcesSpent>(this, nameof(ResourcesSpentEffect));
+            GameState.CreateEffect<BoardActions.ResourcesRecovered>(this, nameof(ResourcesRecoveredEffect));
             GameState.BoardStore.DispatchAction(new BoardActions.SetBaseResourceCount { Count = startingResources });
             selectVillageButton.Connect("pressed", this, nameof(OnSelectVillagePressed));
             selectTowerButton.Connect("pressed", this, nameof(OnSelectTowerPressed));
             selectBarracksButton.Connect("pressed", this, nameof(OnSelectBarracksPressed));
+        }
+
+        public override void _Ready()
+        {
+            UpdateResourceCount();
         }
 
         public override void _UnhandledInput(InputEvent evt)
@@ -57,6 +64,27 @@ namespace Game.Level
             SetPlacementValidity();
         }
 
+        public bool CanDeleteBuilding(Building building)
+        {
+            return building.GetType() != typeof(Tower) || !TowerHasBuildingsInRadius(building as Tower);
+        }
+
+        private bool TowerHasBuildingsInRadius(Tower tower)
+        {
+            var buildingsInRadius = entities.GetNodesOfType<Building>()
+                .Where(x => !(x is Tower) && GridUtils.IsPointWithinRadius(tower.TilePosition, x.TilePosition, tower.Radius));
+
+            if (!buildingsInRadius.Any()) return false;
+
+            var otherTowers = entities.GetNodesOfType<Tower>().Where(x => x != tower);
+
+            var buildingsAreCoveredByOtherTower = buildingsInRadius.All(x =>
+            {
+                return otherTowers.Any(y => GridUtils.IsPointWithinRadius(y.TilePosition, x.TilePosition, y.Radius));
+            });
+            return !buildingsAreCoveredByOtherTower;
+        }
+
         private Vector2 GetHoveredTile()
         {
             return TileMap.WorldToMap(TileMap.GetGlobalMousePosition());
@@ -69,6 +97,7 @@ namespace Game.Level
 
             var hoveredTile = GameState.BoardStore.State.HoveredTile;
             var valid = true;
+
             if (TileMap.GetCellv(hoveredTile) != 0)
             {
                 valid = false;
@@ -79,10 +108,10 @@ namespace Game.Level
                 valid = false;
             }
 
-            var buildings = entities.GetNodesOfType<Building>();
-            var hasProximityToBuilding = buildings.Any(x => GridUtils.IsPointWithinRadius(x.TilePosition, hoveredTile, x.Radius));
+            var towers = entities.GetNodesOfType<Tower>();
+            var hasProximityToTower = towers.Any(x => GridUtils.IsPointWithinRadius(x.TilePosition, hoveredTile, x.Radius));
 
-            if (!hasProximityToBuilding)
+            if (!hasProximityToTower)
             {
                 valid = false;
             }
@@ -91,6 +120,12 @@ namespace Game.Level
                 !x.Disabled && GridUtils.IsPointWithinRadius(x.TilePos, hoveredTile, GoblinCamp.RADIUS)
             );
             if (isWithinGoblinCamp && selectedBuilding.Type != typeof(Barracks))
+            {
+                valid = false;
+            }
+
+            var isOccupied = entities.GetNodesOfType<Building>().Any(x => x.TilePosition == hoveredTile);
+            if (isOccupied)
             {
                 valid = false;
             }
@@ -105,8 +140,8 @@ namespace Game.Level
             if (!GameState.BoardStore.State.TilePlacementValid) return;
 
             var building = GD.Load<PackedScene>(GameState.BoardStore.State.SelectedBuildingInfo.ScenePath).InstanceOrNull<Building>();
+            building.GlobalPosition = tile * TileMap.CellSize;
             entities.AddChild(building);
-            building.SetTilePosition(tile);
             GameState.BoardStore.DispatchAction(new BoardActions.BuildingDeselected());
         }
 
@@ -152,7 +187,17 @@ namespace Game.Level
             UpdateResourceCount();
         }
 
+        private void ResourcesUnharvestedEffect(object _)
+        {
+            UpdateResourceCount();
+        }
+
         private void ResourcesSpentEffect(object _)
+        {
+            UpdateResourceCount();
+        }
+
+        private void ResourcesRecoveredEffect(object _)
         {
             UpdateResourceCount();
         }
