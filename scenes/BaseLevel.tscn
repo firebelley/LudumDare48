@@ -56,4 +56,4 @@ __meta__ = {
 [node name="SelectVillageButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
 margin_right = 97.0
 margin_bottom = 20.0
-text = "Select Village"
+text = "Village"
