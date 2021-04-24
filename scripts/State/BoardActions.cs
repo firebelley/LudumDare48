@@ -62,7 +62,7 @@ namespace Game.State
 
         public class BarracksRemoved : BaseAction
         {
-            public Vector2 TilePosition;
+            public Barracks Barracks;
         }
     }
 }

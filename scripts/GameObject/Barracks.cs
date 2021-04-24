@@ -8,5 +8,10 @@ namespace Game.GameObject
         {
             GameState.BoardStore.DispatchAction(new BoardActions.BarracksPlaced { Barracks = this });
         }
+
+        protected override void Destroyed()
+        {
+            GameState.BoardStore.DispatchAction(new BoardActions.BarracksRemoved { Barracks = this });
+        }
     }
 }

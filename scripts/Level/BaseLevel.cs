@@ -66,7 +66,18 @@ namespace Game.Level
 
         public bool CanDeleteBuilding(Building building)
         {
-            return building.GetType() != typeof(Tower) || !TowerHasBuildingsInRadius(building as Tower);
+            return building switch
+            {
+                Tower => !TowerHasBuildingsInRadius(building as Tower),
+                Barracks => !BarracksIsProtecting(building as Barracks),
+                _ => true,
+            };
+        }
+
+        public bool ShouldGoblinCampBeDisabled(GoblinCamp goblinCamp, Barracks excludeBarracks = null)
+        {
+            var barracks = entities.GetNodesOfType<Barracks>().Where(x => x != excludeBarracks);
+            return barracks.Any(x => GridUtils.IsPointWithinRadius(x.TilePosition, goblinCamp.TilePos, x.Radius));
         }
 
         private bool TowerHasBuildingsInRadius(Tower tower)
@@ -80,6 +91,21 @@ namespace Game.Level
 
             var buildingsAreCoveredByOtherTower = buildingsInRadius.All(x => otherTowers.Any(y => GridUtils.IsPointWithinRadius(y.TilePosition, x.TilePosition, y.Radius)));
             return !buildingsAreCoveredByOtherTower;
+        }
+
+        private bool BarracksIsProtecting(Barracks barracks)
+        {
+            var buildings = entities.GetNodesOfType<Building>().Where(x => x is not Barracks);
+            var otherBarracks = entities.GetNodesOfType<Barracks>().Where(x => x != barracks);
+            var disabledGoblinCamps = entities.GetNodesOfType<GoblinCamp>().Where(x => x.Disabled);
+
+            if (!disabledGoblinCamps.Any(x => buildings.Any(y => GridUtils.IsPointWithinRadius(x.TilePos, y.TilePosition, GoblinCamp.RADIUS))))
+            {
+                return false;
+            }
+
+            var goblinCampsInRadius = entities.GetNodesOfType<GoblinCamp>().Where(x => GridUtils.IsPointWithinRadius(x.TilePos, barracks.TilePosition, barracks.Radius));
+            return goblinCampsInRadius.Any() && !goblinCampsInRadius.All(camp => otherBarracks.Any(other => GridUtils.IsPointWithinRadius(other.TilePosition, camp.TilePos, other.Radius)));
         }
 
         private Vector2 GetHoveredTile()
