@@ -12,7 +12,7 @@ namespace Game.Level
     {
         private const string INPUT_CLICK = "click";
 
-        [Node]
+        [Node("Entities/TileMap")]
         public TileMap TileMap { get; private set; }
         [Node]
         private ResourcePreloader resourcePreloader;
