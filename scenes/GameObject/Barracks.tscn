@@ -7,8 +7,8 @@
 [node name="Barracks" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 Radius = 2
-ResourceCost = 10
+ResourceCost = 8
 GhostTexture = ExtResource( 4 )
 
-[node name="Sprite" parent="." index="1"]
+[node name="Sprite" parent="." index="2"]
 texture = ExtResource( 4 )
