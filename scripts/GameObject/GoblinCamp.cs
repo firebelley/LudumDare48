@@ -1,6 +1,5 @@
 using Game.Level;
 using Game.State;
-using Game.Util;
 using Godot;
 using GodotUtilities;
 
