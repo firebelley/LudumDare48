@@ -12,6 +12,11 @@ namespace Game.GameObject
         public bool Disabled { get; private set; } = false;
         public Vector2 TilePos { get; private set; }
 
+        [Node]
+        private Particles2D particles2D;
+        [Node]
+        private Sprite sprite;
+
         public override void _EnterTree()
         {
             this.WireNodes();
@@ -24,16 +29,22 @@ namespace Game.GameObject
             TilePos = this.GetAncestor<BaseLevel>()?.TileMap.WorldToMap(GlobalPosition) ?? Vector2.Zero;
         }
 
+        private void UpdateState()
+        {
+            sprite.Modulate = Disabled ? new Color(100f / 255f, 100f / 255f, 100f / 255f) : Colors.White;
+            particles2D.Emitting = Disabled;
+        }
+
         private void BarracksPlacedEffect(BoardActions.BarracksPlaced barracksPlaced)
         {
             Disabled = this.GetAncestor<BaseLevel>().ShouldGoblinCampBeDisabled(this);
-            Modulate = Disabled ? Colors.Transparent : Colors.White;
+            UpdateState();
         }
 
         private void BarracksRemovedEffect(BoardActions.BarracksRemoved barracksRemoved)
         {
             Disabled = this.GetAncestor<BaseLevel>().ShouldGoblinCampBeDisabled(this, barracksRemoved.Barracks);
-            Modulate = Disabled ? Colors.Transparent : Colors.White;
+            UpdateState();
         }
     }
 }
