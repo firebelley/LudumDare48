@@ -82,14 +82,15 @@ namespace Game.Level
 
         private bool TowerHasBuildingsInRadius(Tower tower)
         {
+            var otherTowersInRadius = entities.GetNodesOfType<Tower>().Where(x => x != tower && GridUtils.IsPointWithinRadius(tower.TilePosition, x.TilePosition, tower.Radius));
+            var otherTowersConnected = otherTowersInRadius.All(x => otherTowersInRadius.Any(y => x != y && GridUtils.IsPointWithinRadius(x.TilePosition, y.TilePosition, x.Radius)));
+            if (otherTowersInRadius.Count() > 1 && !otherTowersConnected) return true;
+
             var buildingsInRadius = entities.GetNodesOfType<Building>()
                 .Where(x => !(x is Tower) && GridUtils.IsPointWithinRadius(tower.TilePosition, x.TilePosition, tower.Radius));
-
             if (!buildingsInRadius.Any()) return false;
 
-            var otherTowers = entities.GetNodesOfType<Tower>().Where(x => x != tower);
-
-            var buildingsAreCoveredByOtherTower = buildingsInRadius.All(x => otherTowers.Any(y => GridUtils.IsPointWithinRadius(y.TilePosition, x.TilePosition, y.Radius)));
+            var buildingsAreCoveredByOtherTower = buildingsInRadius.All(x => otherTowersInRadius.Any(y => GridUtils.IsPointWithinRadius(y.TilePosition, x.TilePosition, y.Radius)));
             return !buildingsAreCoveredByOtherTower;
         }
 
