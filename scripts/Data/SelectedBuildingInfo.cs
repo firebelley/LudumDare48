@@ -1,3 +1,5 @@
+using System;
+using Game.GameObject;
 using Godot;
 
 namespace Game.Data
@@ -8,6 +10,7 @@ namespace Game.Data
         public int Radius;
         public int Cost;
         public Texture Texture;
+        public Type Type;
 
         public static SelectedBuildingInfo FromBuilding(Building building)
         {
@@ -17,6 +20,7 @@ namespace Game.Data
                 Radius = building.Radius,
                 Cost = building.ResourceCost,
                 Texture = building.GhostTexture,
+                Type = building.GetType(),
             };
         }
     }

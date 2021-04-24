@@ -22,6 +22,8 @@ namespace Game
         private Button selectVillageButton;
         [Node("CanvasLayer/Control/VBoxContainer/SelectTowerButton")]
         private Button selectTowerButton;
+        [Node("CanvasLayer/Control/VBoxContainer/SelectBarracksButton")]
+        private Button selectBarracksButton;
 
         [Export]
         private int startingResources = 5;
@@ -34,6 +36,7 @@ namespace Game
             GameState.BoardStore.DispatchAction(new BoardActions.ResourcesGained { Count = startingResources });
             selectVillageButton.Connect("pressed", this, nameof(OnSelectVillagePressed));
             selectTowerButton.Connect("pressed", this, nameof(OnSelectTowerPressed));
+            selectBarracksButton.Connect("pressed", this, nameof(OnSelectBarracksPressed));
         }
 
         public override void _UnhandledInput(InputEvent evt)
@@ -83,7 +86,7 @@ namespace Game
             var isWithinGoblinCamp = entities.GetNodesOfType<GoblinCamp>().Any(x =>
                 !x.Disabled && GridUtils.IsPointWithinRadius(x.TilePos, hoveredTile, GoblinCamp.RADIUS)
             );
-            if (isWithinGoblinCamp)
+            if (isWithinGoblinCamp && selectedBuilding.Type != typeof(Barracks))
             {
                 valid = false;
             }
@@ -112,6 +115,12 @@ namespace Game
         private void OnSelectTowerPressed()
         {
             var building = resourcePreloader.InstanceSceneOrNull<Tower>();
+            OnBuildingPressed(building);
+        }
+
+        private void OnSelectBarracksPressed()
+        {
+            var building = resourcePreloader.InstanceSceneOrNull<Barracks>();
             OnBuildingPressed(building);
         }
 

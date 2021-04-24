@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://resources/tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://scripts/BaseLevel.cs" type="Script" id=2]
@@ -7,13 +7,14 @@
 [ext_resource path="res://scenes/Util/MouseDispatcher.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/GameObject/GoblinCamp.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/GameObject/Village.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/GameObject/Barracks.tscn" type="PackedScene" id=8]
 
 [node name="BaseLevel" type="Node"]
 script = ExtResource( 2 )
 startingResources = 100
 
 [node name="ResourcePreloader" type="ResourcePreloader" parent="."]
-resources = [ PoolStringArray( "Tower", "Village" ), [ ExtResource( 3 ), ExtResource( 7 ) ] ]
+resources = [ PoolStringArray( "Barracks", "Tower", "Village" ), [ ExtResource( 8 ), ExtResource( 3 ), ExtResource( 7 ) ] ]
 
 [node name="MouseDispatcher" parent="." instance=ExtResource( 5 )]
 
@@ -55,12 +56,18 @@ __meta__ = {
 }
 
 [node name="SelectVillageButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
-margin_right = 64.0
+margin_right = 66.0
 margin_bottom = 20.0
 text = "Village"
 
 [node name="SelectTowerButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
 margin_top = 24.0
-margin_right = 64.0
+margin_right = 66.0
 margin_bottom = 44.0
 text = "Tower"
+
+[node name="SelectBarracksButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
+margin_top = 48.0
+margin_right = 66.0
+margin_bottom = 68.0
+text = "Barracks"

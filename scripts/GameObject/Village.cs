@@ -1,7 +1,7 @@
 using Game.State;
 using GodotUtilities;
 
-namespace Game
+namespace Game.GameObject
 {
     public class Village : Building
     {
