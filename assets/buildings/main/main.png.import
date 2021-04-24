@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/rocks.png-5b296fef6a001f0df4114ffa0cf8ce06.stex"
+path="res://.import/main.png-28df84038b82f37c2f3ea613e1dda2f0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/rocks/rocks.png"
-dest_files=[ "res://.import/rocks.png-5b296fef6a001f0df4114ffa0cf8ce06.stex" ]
+source_file="res://assets/buildings/main/main.png"
+dest_files=[ "res://.import/main.png-28df84038b82f37c2f3ea613e1dda2f0.stex" ]
 
 [params]
 
