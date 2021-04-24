@@ -12,10 +12,15 @@ namespace Game.GameObject
         public bool Disabled { get; private set; } = false;
         public Vector2 TilePos { get; private set; }
 
+        [Export]
+        private Texture destroyedTexture;
+
         [Node]
         private Particles2D particles2D;
         [Node]
         private Sprite sprite;
+
+        private Texture originalTexture;
 
         public override void _EnterTree()
         {
@@ -26,6 +31,7 @@ namespace Game.GameObject
 
         public override void _Ready()
         {
+            originalTexture = sprite.Texture;
             TilePos = this.GetAncestor<BaseLevel>()?.TileMap.WorldToMap(GlobalPosition) ?? Vector2.Zero;
         }
 
@@ -33,6 +39,7 @@ namespace Game.GameObject
         {
             sprite.Modulate = Disabled ? new Color(100f / 255f, 100f / 255f, 100f / 255f) : Colors.White;
             particles2D.Emitting = Disabled;
+            sprite.Texture = Disabled ? destroyedTexture : originalTexture;
         }
 
         private void BarracksPlacedEffect(BoardActions.BarracksPlaced barracksPlaced)
