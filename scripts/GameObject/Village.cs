@@ -3,6 +3,7 @@ using Game.State;
 using Godot;
 using GodotUtilities;
 using Game.Level;
+using Game.Util;
 
 namespace Game.GameObject
 {
@@ -29,18 +30,13 @@ namespace Game.GameObject
 
             if (tileMap == null) return result;
 
-            for (int x = (int)TilePosition.x - Radius; x <= TilePosition.x + Radius; x++)
+            GridUtils.ForEachTileInRadius(TilePosition, Radius, (vector) =>
             {
-                for (int y = (int)TilePosition.y - Radius; y <= TilePosition.y + Radius; y++)
+                if (tileMap.GetCellv(vector) == 1)
                 {
-                    var vec = new Vector2(x, y);
-                    if (tileMap.GetCell(x, y) == 1)
-                    {
-                        result.Add(vec);
-                    }
+                    result.Add(vector);
                 }
-            }
-
+            });
             return result;
         }
     }
