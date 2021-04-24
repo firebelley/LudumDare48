@@ -1,5 +1,4 @@
 using System.Linq;
-using Game.Data;
 using Game.GameObject;
 using Game.State;
 using Game.Util;
@@ -18,14 +17,6 @@ namespace Game.Level
         private ResourcePreloader resourcePreloader;
         [Node]
         private Node2D entities;
-        [Node("CanvasLayer/Control/VBoxContainer/SelectVillageButton")]
-        private Button selectVillageButton;
-        [Node("CanvasLayer/Control/VBoxContainer/SelectTowerButton")]
-        private Button selectTowerButton;
-        [Node("CanvasLayer/Control/VBoxContainer/SelectBarracksButton")]
-        private Button selectBarracksButton;
-        [Node("CanvasLayer/Control/ResourcesLabel")]
-        private Label resourcesLabel;
 
         [Export]
         private int startingResources = 5;
@@ -35,20 +26,14 @@ namespace Game.Level
             this.WireNodes();
             GameState.BoardStore.Reset();
             GameState.CreateEffect<BoardActions.TileClicked>(this, nameof(TileClickedEffect));
-            GameState.CreateEffect<BoardActions.ResourcesHarvested>(this, nameof(ResourcesHarvestedEffect));
-            GameState.CreateEffect<BoardActions.ResourcesUnharvested>(this, nameof(ResourcesUnharvestedEffect));
-            GameState.CreateEffect<BoardActions.ResourcesSpent>(this, nameof(ResourcesSpentEffect));
-            GameState.CreateEffect<BoardActions.ResourcesRecovered>(this, nameof(ResourcesRecoveredEffect));
             GameState.CreateEffect<BoardActions.TowerPlaced>(this, nameof(TowerPlacedEffect));
             GameState.BoardStore.DispatchAction(new BoardActions.SetBaseResourceCount { Count = startingResources });
-            selectVillageButton.Connect("pressed", this, nameof(OnSelectVillagePressed));
-            selectTowerButton.Connect("pressed", this, nameof(OnSelectTowerPressed));
-            selectBarracksButton.Connect("pressed", this, nameof(OnSelectBarracksPressed));
         }
 
         public override void _Ready()
         {
-            UpdateResourceCount();
+            var ui = resourcePreloader.InstanceSceneOrNull<LevelUI>();
+            AddChild(ui);
         }
 
         public override void _UnhandledInput(InputEvent evt)
@@ -170,61 +155,9 @@ namespace Game.Level
             GameState.BoardStore.DispatchAction(new BoardActions.BuildingDeselected());
         }
 
-        private void UpdateResourceCount()
-        {
-            resourcesLabel.Text = $"Resources: {GameState.BoardStore.State.ResourcesAvailable}";
-        }
-
-        private void OnSelectVillagePressed()
-        {
-            var building = resourcePreloader.InstanceSceneOrNull<Village>();
-            OnBuildingPressed(building);
-        }
-
-        private void OnSelectTowerPressed()
-        {
-            var building = resourcePreloader.InstanceSceneOrNull<Tower>();
-            OnBuildingPressed(building);
-        }
-
-        private void OnSelectBarracksPressed()
-        {
-            var building = resourcePreloader.InstanceSceneOrNull<Barracks>();
-            OnBuildingPressed(building);
-        }
-
-        private void OnBuildingPressed(Building building)
-        {
-            GameState.BoardStore.DispatchAction(new BoardActions.BuildingSelected
-            {
-                SelectedBuildingInfo = SelectedBuildingInfo.FromBuilding(building)
-            });
-            building.QueueFree();
-        }
-
         private void TileClickedEffect(BoardActions.TileClicked tileClicked)
         {
             HandleTileClick(tileClicked.Tile);
-        }
-
-        private void ResourcesHarvestedEffect(object _)
-        {
-            UpdateResourceCount();
-        }
-
-        private void ResourcesUnharvestedEffect(object _)
-        {
-            UpdateResourceCount();
-        }
-
-        private void ResourcesSpentEffect(object _)
-        {
-            UpdateResourceCount();
-        }
-
-        private void ResourcesRecoveredEffect(object _)
-        {
-            UpdateResourceCount();
         }
 
         private void TowerPlacedEffect(BoardActions.TowerPlaced towerPlaced)
