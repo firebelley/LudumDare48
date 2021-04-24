@@ -78,10 +78,7 @@ namespace Game.Level
 
             var otherTowers = entities.GetNodesOfType<Tower>().Where(x => x != tower);
 
-            var buildingsAreCoveredByOtherTower = buildingsInRadius.All(x =>
-            {
-                return otherTowers.Any(y => GridUtils.IsPointWithinRadius(y.TilePosition, x.TilePosition, y.Radius));
-            });
+            var buildingsAreCoveredByOtherTower = buildingsInRadius.All(x => otherTowers.Any(y => GridUtils.IsPointWithinRadius(y.TilePosition, x.TilePosition, y.Radius)));
             return !buildingsAreCoveredByOtherTower;
         }
 
