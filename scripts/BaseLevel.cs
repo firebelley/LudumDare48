@@ -35,9 +35,9 @@ namespace Game
             this.WireNodes();
             GameState.BoardStore.Reset();
             GameState.CreateEffect<BoardActions.TileClicked>(this, nameof(TileClickedEffect));
-            GameState.CreateEffect<BoardActions.ResourcesGained>(this, nameof(ResourcesGainedEffect));
+            GameState.CreateEffect<BoardActions.ResourcesHarvested>(this, nameof(ResourcesHarvestedEffect));
             GameState.CreateEffect<BoardActions.ResourcesSpent>(this, nameof(ResourcesSpentEffect));
-            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesGained { Count = startingResources });
+            GameState.BoardStore.DispatchAction(new BoardActions.SetBaseResourceCount { Count = startingResources });
             selectVillageButton.Connect("pressed", this, nameof(OnSelectVillagePressed));
             selectTowerButton.Connect("pressed", this, nameof(OnSelectTowerPressed));
             selectBarracksButton.Connect("pressed", this, nameof(OnSelectBarracksPressed));
@@ -74,7 +74,7 @@ namespace Game
                 valid = false;
             }
 
-            if (selectedBuilding.Cost > GameState.BoardStore.State.ResourceCount)
+            if (selectedBuilding.Cost > GameState.BoardStore.State.ResourcesAvailable)
             {
                 valid = false;
             }
@@ -112,7 +112,7 @@ namespace Game
 
         private void UpdateResourceCount()
         {
-            resourcesLabel.Text = $"Resources: {GameState.BoardStore.State.ResourceCount}";
+            resourcesLabel.Text = $"Resources: {GameState.BoardStore.State.ResourcesAvailable}";
         }
 
         private void OnSelectVillagePressed()
@@ -147,7 +147,7 @@ namespace Game
             HandleTileClick(tileClicked.Tile);
         }
 
-        private void ResourcesGainedEffect(object _)
+        private void ResourcesHarvestedEffect(object _)
         {
             UpdateResourceCount();
         }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Data;
 using Game.GameObject;
 using Godot;
@@ -14,9 +15,14 @@ namespace Game.State
 
         public class BuildingDeselected : BaseAction { }
 
-        public class ResourcesGained : BaseAction
+        public class SetBaseResourceCount : BaseAction
         {
             public int Count;
+        }
+
+        public class ResourcesHarvested : BaseAction
+        {
+            public List<Vector2> Tiles = new();
         }
 
         public class ResourcesSpent : BaseAction
