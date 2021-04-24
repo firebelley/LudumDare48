@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://resources/tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://scripts/Level/BaseLevel.cs" type="Script" id=2]
@@ -8,12 +8,13 @@
 [ext_resource path="res://scenes/GameObject/LevelCamera.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/GameObject/Village.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/GameObject/Barracks.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/UI/LevelUI.tscn" type="PackedScene" id=9]
 
 [node name="BaseLevel" type="Node"]
 script = ExtResource( 2 )
 
 [node name="ResourcePreloader" type="ResourcePreloader" parent="."]
-resources = [ PoolStringArray( "Barracks", "Tower", "Village" ), [ ExtResource( 8 ), ExtResource( 3 ), ExtResource( 7 ) ] ]
+resources = [ PoolStringArray( "Barracks", "LevelUI", "Tower", "Village" ), [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 3 ), ExtResource( 7 ) ] ]
 
 [node name="MouseDispatcher" parent="." instance=ExtResource( 5 )]
 
@@ -28,48 +29,3 @@ cell_y_sort = true
 format = 1
 
 [node name="BuildingGhost" parent="." instance=ExtResource( 4 )]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Control" type="Control" parent="CanvasLayer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
-anchor_bottom = 1.0
-rect_min_size = Vector2( 64, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SelectVillageButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
-margin_right = 66.0
-margin_bottom = 20.0
-text = "Village"
-
-[node name="SelectTowerButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
-margin_top = 24.0
-margin_right = 66.0
-margin_bottom = 44.0
-text = "Tower"
-
-[node name="SelectBarracksButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
-margin_top = 48.0
-margin_right = 66.0
-margin_bottom = 68.0
-text = "Barracks"
-
-[node name="ResourcesLabel" type="Label" parent="CanvasLayer/Control"]
-anchor_right = 1.0
-margin_bottom = 14.0
-text = "Resources: {0}"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="YSort" type="YSort" parent="."]
