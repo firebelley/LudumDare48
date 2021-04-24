@@ -102,7 +102,7 @@ namespace Game
 
         private void OnSelectVillagePressed()
         {
-            var building = resourcePreloader.InstanceSceneOrNull<Building>();
+            var building = resourcePreloader.InstanceSceneOrNull<Village>();
             GameState.BoardStore.DispatchAction(new BoardActions.BuildingSelected
             {
                 SelectedBuildingInfo = SelectedBuildingInfo.FromBuilding(building)
