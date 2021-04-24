@@ -1,3 +1,5 @@
+using Game.State;
+using Game.Util;
 using Godot;
 using GodotUtilities;
 
@@ -13,11 +15,21 @@ namespace Game.GameObject
         public override void _EnterTree()
         {
             this.WireNodes();
+            GameState.CreateEffect<BoardActions.BarracksPlaced>(this, nameof(BarracksPlacedEffect));
         }
 
         public override void _Ready()
         {
             TilePos = this.GetAncestor<BaseLevel>()?.TileMap.WorldToMap(GlobalPosition) ?? Vector2.Zero;
+        }
+
+        private void BarracksPlacedEffect(BoardActions.BarracksPlaced barracksPlaced)
+        {
+            if (GridUtils.IsPointWithinRadius(TilePos, barracksPlaced.Barracks.TilePosition, barracksPlaced.Barracks.Radius))
+            {
+                Disabled = true;
+                Modulate = Colors.Transparent;
+            }
         }
     }
 }

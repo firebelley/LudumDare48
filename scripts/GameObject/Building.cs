@@ -2,7 +2,7 @@ using Game.State;
 using Godot;
 using GodotUtilities;
 
-namespace Game
+namespace Game.GameObject
 {
     public class Building : Node2D
     {

@@ -1,4 +1,5 @@
 using Game.Data;
+using Game.GameObject;
 using Godot;
 using GodotUtilities.StateManagement;
 
@@ -36,6 +37,16 @@ namespace Game.State
         public class SetPlacementValid : BaseAction
         {
             public bool Valid;
+        }
+
+        public class BarracksPlaced : BaseAction
+        {
+            public Barracks Barracks;
+        }
+
+        public class BarracksRemoved : BaseAction
+        {
+            public Vector2 TilePosition;
         }
     }
 }
