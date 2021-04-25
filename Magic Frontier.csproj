@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Godot.NET.Sdk/3.3.0">
   <PropertyGroup>
-    <RootNamespace>LudumDare</RootNamespace>
+    <RootNamespace>Magic Frontier</RootNamespace>
     <CodeAnalysisRuleSet>roslynator.ruleset</CodeAnalysisRuleSet>
     <TargetFramework>net472</TargetFramework>
     <LangVersion>9.0</LangVersion>

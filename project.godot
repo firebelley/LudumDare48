@@ -10,7 +10,7 @@ config_version=4
 
 [application]
 
-config/name="LudumDare"
+config/name="Magic Frontier"
 run/main_scene="res://scenes/Main.tscn"
 boot_splash/image="res://assets/ui/application icon.png"
 boot_splash/fullsize=false

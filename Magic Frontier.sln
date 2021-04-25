@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudumDare", "LudumDare.csproj", "{998CC781-EDEA-4D8B-9129-77E59CAFC359}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magic Frontier", "Magic Frontier.csproj", "{998CC781-EDEA-4D8B-9129-77E59CAFC359}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
