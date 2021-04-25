@@ -78,6 +78,7 @@ namespace Game.State
         {
             public string Text;
             public Node Owner;
+            public bool ShowDestroy;
         }
 
         public class ClearTooltip : BaseAction
