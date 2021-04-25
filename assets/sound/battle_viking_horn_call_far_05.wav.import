@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/battle_viking_horn_call_far_05.wav-80554472a6b4ceab04d97938c51e7608.sample"
+
+[deps]
+
+source_file="res://assets/sound/battle_viking_horn_call_far_05.wav"
+dest_files=[ "res://.import/battle_viking_horn_call_far_05.wav-80554472a6b4ceab04d97938c51e7608.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
