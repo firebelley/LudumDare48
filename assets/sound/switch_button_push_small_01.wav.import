@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/switch_button_push_small_01.wav-7adfd8f3b4ce4e0c9e2481f304bdc400.sample"
+
+[deps]
+
+source_file="res://assets/sound/switch_button_push_small_01.wav"
+dest_files=[ "res://.import/switch_button_push_small_01.wav-7adfd8f3b4ce4e0c9e2481f304bdc400.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

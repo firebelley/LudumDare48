@@ -117,6 +117,7 @@ namespace Game.Level
             if (!GameState.BoardStore.State.TilePlacementValid) return;
 
             var building = GD.Load<PackedScene>(GameState.BoardStore.State.SelectedBuildingInfo.ScenePath).InstanceOrNull<Building>();
+            building.PlayerPlaced = true;
             building.GlobalPosition = tile * TileMap.CellSize;
             Entities.AddChild(building);
             GameState.BoardStore.DispatchAction(new BoardActions.BuildingDeselected());

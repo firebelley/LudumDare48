@@ -16,6 +16,8 @@ namespace Game.GameObject
         protected Area2D area2D;
         [Node]
         protected ResourcePreloader resourcePreloader;
+        [Node]
+        protected AudioStreamPlayer buildAudioStreamPlayer;
 
         [Export]
         public int Radius { get; private set; } = 1;
@@ -29,6 +31,8 @@ namespace Game.GameObject
         public string DisplayName { get; private set; }
 
         protected TileMap tileMap;
+
+        public bool PlayerPlaced;
 
         public override void _EnterTree()
         {
@@ -48,6 +52,11 @@ namespace Game.GameObject
             area2D.Connect("input_event", this, nameof(OnAreaInputEvent));
             area2D.Connect("mouse_entered", this, nameof(OnAreaMouseEntered));
             area2D.Connect("mouse_exited", this, nameof(OnAreaMouseExited));
+
+            if (PlayerPlaced)
+            {
+                buildAudioStreamPlayer.PlayWithPitchRange(.8f, 1f);
+            }
         }
 
         public void SetTilePositionFromGlobalPosition()

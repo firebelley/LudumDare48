@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/boulder_impact_on_stones_14.wav-4e1de74cbfa6cee5471f5df242a8b20c.sample"
+
+[deps]
+
+source_file="res://assets/sound/boulder_impact_on_stones_14.wav"
+dest_files=[ "res://.import/boulder_impact_on_stones_14.wav-4e1de74cbfa6cee5471f5df242a8b20c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Bluezone_BC0254_wood_handling_003.wav-1ec4d10d5bf32ef3b2ee717aae2d8e7d.sample"
+
+[deps]
+
+source_file="res://assets/sound/Bluezone_BC0254_wood_handling_003.wav"
+dest_files=[ "res://.import/Bluezone_BC0254_wood_handling_003.wav-1ec4d10d5bf32ef3b2ee717aae2d8e7d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

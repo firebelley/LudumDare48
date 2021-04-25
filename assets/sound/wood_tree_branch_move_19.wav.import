@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/wood_tree_branch_move_19.wav-59314ac645ec5c8e5f96bc6307caa480.sample"
+
+[deps]
+
+source_file="res://assets/sound/wood_tree_branch_move_19.wav"
+dest_files=[ "res://.import/wood_tree_branch_move_19.wav-59314ac645ec5c8e5f96bc6307caa480.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

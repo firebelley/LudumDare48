@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Bluezone_BC0254_wood_falling_log_002_006.wav-e42e7e964fde110efbcfb9378befd753.sample"
+
+[deps]
+
+source_file="res://assets/sound/Bluezone_BC0254_wood_falling_log_002_006.wav"
+dest_files=[ "res://.import/Bluezone_BC0254_wood_falling_log_002_006.wav-e42e7e964fde110efbcfb9378befd753.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
