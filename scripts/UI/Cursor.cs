@@ -31,6 +31,7 @@ namespace Game.UI
         public override void _Ready()
         {
             UpdateTooltip(null);
+            Input.SetMouseMode(Input.MouseMode.Hidden);
         }
 
         public override void _Process(float delta)
