@@ -25,11 +25,11 @@ __meta__ = {
 
 [node name="ButtonPanel" type="PanelContainer" parent="MarginContainer"]
 margin_left = 506.0
-margin_top = 314.0
+margin_top = 8.0
 margin_right = 632.0
-margin_bottom = 352.0
+margin_bottom = 46.0
 size_flags_horizontal = 8
-size_flags_vertical = 8
+size_flags_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ButtonPanel"]
 margin_left = 3.0
@@ -54,6 +54,13 @@ custom_constants/separation = 16
 margin_right = 64.0
 margin_bottom = 24.0
 text = "Restart"
+
+[node name="OptionsButton" type="Button" parent="MarginContainer/ButtonPanel/MarginContainer/VBoxContainer"]
+visible = false
+margin_left = 80.0
+margin_right = 144.0
+margin_bottom = 24.0
+text = "Options"
 
 [node name="HelpButton" type="Button" parent="MarginContainer/ButtonPanel/MarginContainer/VBoxContainer"]
 margin_left = 80.0
