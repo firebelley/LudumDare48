@@ -10,8 +10,12 @@ namespace Game.UI
 {
     public class GridContext : TileMap
     {
+        private const int REALTIME_INDEX = 2;
         private const int INVALID_INDEX = 1;
         private const int VALID_INDEX = 0;
+
+        [Node]
+        private TileMap realtimeMap;
 
         private BaseLevel baseLevel;
 
@@ -21,11 +25,16 @@ namespace Game.UI
             baseLevel = this.GetAncestor<BaseLevel>();
             GameState.CreateEffect<BoardActions.BuildingSelected>(this, nameof(BuildingSelectedEffect));
             GameState.CreateEffect<BoardActions.BuildingDeselected>(this, nameof(BuildingDeselectedEffect));
+            GameState.CreateDeferredEffect<BoardActions.TileHovered>(this, nameof(TileHoveredEffect));
         }
 
         public override void _Process(float delta)
         {
             SetHoverPlacementValid();
+            if (GameState.BoardStore.State.SelectedBuildingInfo == null)
+            {
+                realtimeMap.Clear();
+            }
         }
 
         private void UpdateTileMap()
@@ -90,6 +99,22 @@ namespace Game.UI
                 valid = false;
             }
             return valid;
+        }
+
+        private void TileHoveredEffect(object _)
+        {
+            realtimeMap.Clear();
+            var selectedBuilding = GameState.BoardStore.State.SelectedBuildingInfo;
+            if (selectedBuilding != null && GameState.BoardStore.State.TilePlacementValid)
+            {
+                GridUtils.ForEachTileInRadius(GameState.BoardStore.State.HoveredTile, selectedBuilding.Radius, (vector) =>
+                {
+                    if (GetCellv(vector) == -1 && baseLevel.TileMap.GetCellv(vector) > -1)
+                    {
+                        realtimeMap.SetCellv(vector, REALTIME_INDEX);
+                    }
+                });
+            }
         }
 
         private void BuildingSelectedEffect(object _)
