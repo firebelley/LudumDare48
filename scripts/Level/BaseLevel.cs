@@ -19,6 +19,8 @@ namespace Game.Level
         private ResourcePreloader resourcePreloader;
         [Node]
         public Node2D Entities { get; private set; }
+        [Node]
+        private LevelCamera levelCamera;
 
         [Export]
         private int startingResources = 5;
@@ -37,6 +39,8 @@ namespace Game.Level
         {
             var ui = resourcePreloader.InstanceSceneOrNull<LevelUI>();
             AddChild(ui);
+            var rect = TileMap.GetUsedRect();
+            levelCamera.GlobalPosition = Entities.GetFirstNodeOfType<MainBuilding>()?.GlobalPosition ?? Vector2.Zero;
         }
 
         public override void _UnhandledInput(InputEvent evt)
