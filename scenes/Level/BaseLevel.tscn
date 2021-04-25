@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://resources/tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://scripts/Level/BaseLevel.cs" type="Script" id=2]
@@ -10,12 +10,13 @@
 [ext_resource path="res://scenes/GameObject/Barracks.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/UI/LevelUI.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/UI/GridContext.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/UI/LevelComplete.tscn" type="PackedScene" id=11]
 
 [node name="BaseLevel" type="Node"]
 script = ExtResource( 2 )
 
 [node name="ResourcePreloader" type="ResourcePreloader" parent="."]
-resources = [ PoolStringArray( "Barracks", "LevelUI", "Tower", "Village" ), [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 3 ), ExtResource( 7 ) ] ]
+resources = [ PoolStringArray( "Barracks", "LevelComplete", "LevelUI", "Tower", "Village" ), [ ExtResource( 8 ), ExtResource( 11 ), ExtResource( 9 ), ExtResource( 3 ), ExtResource( 7 ) ] ]
 
 [node name="MouseDispatcher" parent="." instance=ExtResource( 5 )]
 

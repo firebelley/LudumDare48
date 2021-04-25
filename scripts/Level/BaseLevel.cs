@@ -29,6 +29,7 @@ namespace Game.Level
             GameState.BoardStore.Reset();
             GameState.CreateEffect<BoardActions.TileClicked>(this, nameof(TileClickedEffect));
             GameState.CreateEffect<BoardActions.TowerPlaced>(this, nameof(TowerPlacedEffect));
+            GameState.CreateEffect<BoardActions.Complete>(this, nameof(CompleteEffect));
             GameState.BoardStore.DispatchAction(new BoardActions.SetBaseResourceCount { Count = startingResources });
         }
 
@@ -128,8 +129,15 @@ namespace Game.Level
             var goal = Entities.GetFirstNodeOfType<Goal>();
             if (goal != null && GridUtils.IsPointWithinRadius(towerPlaced.Tower.TilePosition, goal.TilePosition, towerPlaced.Tower.Radius))
             {
-                GD.Print("complete");
+                GameState.BoardStore.DispatchAction(new BoardActions.Complete());
             }
+        }
+
+        private void CompleteEffect(object _)
+        {
+            var complete = resourcePreloader.InstanceSceneOrNull<LevelComplete>();
+            AddChild(complete);
+            this.GetFirstNodeOfType<LevelUI>()?.QueueFree();
         }
     }
 }

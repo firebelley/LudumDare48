@@ -69,5 +69,7 @@ namespace Game.State
         {
             public Tower Tower;
         }
+
+        public class Complete : BaseAction { }
     }
 }

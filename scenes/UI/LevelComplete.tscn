@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://resources/theme.tres" type="Theme" id=1]
+[ext_resource path="res://scripts/UI/LevelComplete.cs" type="Script" id=2]
+
+[node name="LevelComplete" type="CanvasLayer"]
+layer = 9
+script = ExtResource( 2 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+margin_left = 249.0
+margin_top = 145.0
+margin_right = 391.0
+margin_bottom = 215.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer"]
+margin_left = 3.0
+margin_top = 3.0
+margin_right = 139.0
+margin_bottom = 67.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 128.0
+margin_bottom = 56.0
+custom_constants/separation = 8
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+margin_right = 120.0
+margin_bottom = 16.0
+text = "LEVEL COMPLETE!"
+
+[node name="Button" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 104.0
+margin_bottom = 48.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Next Level"
