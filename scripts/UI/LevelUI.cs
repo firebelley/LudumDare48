@@ -7,7 +7,7 @@ namespace Game
 {
     public class LevelUI : CanvasLayer
     {
-        [Node("MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ResourcesLabel")]
+        [Node("MarginContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/ResourcesLabel")]
         private Label resourcesLabel;
         [Node("MarginContainer/ButtonPanel/MarginContainer/VBoxContainer/RestartButton")]
         private Button restartButton;
