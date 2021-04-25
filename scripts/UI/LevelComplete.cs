@@ -8,6 +8,8 @@ namespace Game
     {
         [Node("MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Button")]
         private Button nextLevelButton;
+        [Node("MarginContainer/PanelContainer")]
+        private PanelContainer panelContainer;
 
         public override void _EnterTree()
         {
@@ -17,6 +19,11 @@ namespace Game
         public override void _Ready()
         {
             nextLevelButton.Connect("pressed", this, nameof(OnNextLevelPressed));
+        }
+
+        public override void _Process(float delta)
+        {
+            panelContainer.RectPivotOffset = panelContainer.RectSize / 2f;
         }
 
         private void OnNextLevelPressed()
