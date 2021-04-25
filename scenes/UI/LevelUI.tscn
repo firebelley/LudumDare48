@@ -52,7 +52,6 @@ __meta__ = {
 [node name="ResourcesLabel" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 margin_right = 64.0
 margin_bottom = 16.0
-custom_colors/font_color = Color( 0.396078, 0.247059, 0.247059, 1 )
 text = "5"
 align = 1
 autowrap = true

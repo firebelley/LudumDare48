@@ -1,8 +1,10 @@
-[gd_resource type="Theme" load_steps=9 format=2]
+[gd_resource type="Theme" load_steps=10 format=2]
 
 [ext_resource path="res://resources/gold-box.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/ui/panel.png" type="Texture" id=2]
 [ext_resource path="res://assets/ui/button.png" type="Texture" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=6]
 
 [sub_resource type="StyleBoxTexture" id=5]
 content_margin_left = 4.0
@@ -61,10 +63,19 @@ Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
 Button/constants/hseparation = 2
 Button/fonts/font = null
 Button/styles/disabled = null
-Button/styles/focus = null
+Button/styles/focus = SubResource( 6 )
 Button/styles/hover = SubResource( 5 )
 Button/styles/normal = SubResource( 3 )
 Button/styles/pressed = SubResource( 4 )
+Label/colors/font_color = Color( 0.396078, 0.247059, 0.247059, 1 )
+Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
+Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+Label/constants/line_spacing = 3
+Label/constants/shadow_as_outline = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/fonts/font = null
+Label/styles/normal = null
 MarginContainer/constants/margin_bottom = 8
 MarginContainer/constants/margin_left = 8
 MarginContainer/constants/margin_right = 8
