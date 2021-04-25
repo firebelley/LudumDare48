@@ -70,6 +70,8 @@ namespace Game.State
             public Tower Tower;
         }
 
+        public class BuildingPlaced : BaseAction { }
+
         public class Complete : BaseAction { }
 
         public class ShowTooltip : BaseAction

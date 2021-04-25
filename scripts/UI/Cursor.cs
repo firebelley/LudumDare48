@@ -7,6 +7,9 @@ namespace Game.UI
     public class Cursor : CanvasLayer
     {
         private const string ANIM_DEFAULT = "default";
+        private const string ANIM_CLICK = "click";
+        private const string INPUT_CLICK = "click";
+        private const string INPUT_CLICK_ALTERNATE = "click_alternate";
 
         [Node("Node2D/Sprite")]
         private Sprite sprite;
@@ -17,6 +20,8 @@ namespace Game.UI
         [Node("Node2D/Control/PanelContainer/Label")]
         private Label label;
         [Node("Node2D/Control/PanelContainer/AnimationPlayer")]
+        private AnimationPlayer panelAnimationPlayer;
+        [Node]
         private AnimationPlayer animationPlayer;
 
         private Node tooltipOwner;
@@ -41,20 +46,29 @@ namespace Game.UI
             panelContainer.RectPivotOffset = panelContainer.RectSize / 2f;
             panelContainer.RectPosition = new Vector2(-panelContainer.RectPivotOffset.x, panelContainer.RectSize.y);
             control.RectGlobalPosition = sprite.GlobalPosition;
+
+            if (Input.IsActionJustPressed(INPUT_CLICK) || Input.IsActionJustPressed(INPUT_CLICK_ALTERNATE))
+            {
+                if (animationPlayer.IsPlaying())
+                {
+                    animationPlayer.Seek(0f, true);
+                }
+                animationPlayer.Play(ANIM_CLICK);
+            }
         }
 
         private void UpdateTooltip(string text)
         {
-            if (animationPlayer.IsPlaying())
+            if (panelAnimationPlayer.IsPlaying())
             {
-                animationPlayer.Seek(0f, true);
-                animationPlayer.Stop();
+                panelAnimationPlayer.Seek(0f, true);
+                panelAnimationPlayer.Stop();
             }
 
             label.Text = text;
             if (!string.IsNullOrEmpty(text))
             {
-                animationPlayer.Play(ANIM_DEFAULT);
+                panelAnimationPlayer.Play(ANIM_DEFAULT);
             }
             else
             {
