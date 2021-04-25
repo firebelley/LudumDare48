@@ -21,6 +21,7 @@ LevelManager="*res://scripts/LevelManager.cs"
 TransitionManager="*res://scenes/TransitionManager.tscn"
 Cursor="*res://scenes/UI/Cursor.tscn"
 ButtonClicker="*res://scenes/ButtonClicker.tscn"
+MusicPlayer="*res://scenes/Util/MusicPlayer.tscn"
 
 [debug]
 

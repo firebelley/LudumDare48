@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/medieval_battle4.ogg-29884a6d41c8e8d2b94e3f7472f42002.oggstr"
+
+[deps]
+
+source_file="res://assets/sound/medieval_battle4.ogg"
+dest_files=[ "res://.import/medieval_battle4.ogg-29884a6d41c8e8d2b94e3f7472f42002.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0
