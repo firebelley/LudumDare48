@@ -12,7 +12,12 @@ config_version=4
 
 config/name="LudumDare"
 run/main_scene="res://scenes/Main.tscn"
-config/icon="res://icon.png"
+boot_splash/image="res://assets/ui/application icon.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+boot_splash/bg_color=Color( 0.0823529, 0.0823529, 0.0823529, 1 )
+config/icon="res://assets/ui/application icon.png"
+config/windows_native_icon="res://assets/ui/icon.ico"
 
 [autoload]
 
