@@ -4,7 +4,7 @@
 [ext_resource path="res://scenes/GameObject/MainBuilding.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/GameObject/Goal.tscn" type="PackedScene" id=3]
 
-[node name="BaseLevel" instance=ExtResource( 1 )]
+[node name="BaseLevel2" instance=ExtResource( 1 )]
 startingResources = 6
 
 [node name="TileMap" parent="Entities" index="0"]
