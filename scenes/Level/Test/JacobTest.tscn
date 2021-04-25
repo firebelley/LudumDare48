@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Level/BaseLevel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/GameObject/MainBuilding.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/GameObject/Goal.tscn" type="PackedScene" id=4]
 
 [node name="JacobTest" instance=ExtResource( 1 )]
 startingResources = 100
@@ -11,3 +12,6 @@ tile_data = PoolIntArray( -262152, 0, 0, -262151, 0, 0, -262150, 0, 0, -262149, 
 
 [node name="MainBuilding" parent="Entities" index="2" instance=ExtResource( 2 )]
 position = Vector2( -160, -64 )
+
+[node name="Goal" parent="Entities" index="3" instance=ExtResource( 4 )]
+position = Vector2( -32, -64 )

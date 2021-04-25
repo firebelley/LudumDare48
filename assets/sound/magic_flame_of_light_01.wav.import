@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/magic_flame_of_light_01.wav-82ccebaf1650422b59a2996cfd57c89c.sample"
+
+[deps]
+
+source_file="res://assets/sound/magic_flame_of_light_01.wav"
+dest_files=[ "res://.import/magic_flame_of_light_01.wav-82ccebaf1650422b59a2996cfd57c89c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
