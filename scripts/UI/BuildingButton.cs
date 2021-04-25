@@ -12,6 +12,8 @@ namespace Game
         private TextureRect textureRect;
         [Node]
         private Button button;
+        [Node]
+        private Label name;
 
         [Export]
         private PackedScene buildingScene;
@@ -33,6 +35,7 @@ namespace Game
             var building = buildingScene.InstanceOrNull<Building>();
             textureRect.Texture = building.GhostTexture;
             button.Text = $"Cost: {building.ResourceCost}";
+            name.Text = building.DisplayName;
             building.QueueFree();
         }
 

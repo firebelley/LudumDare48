@@ -17,8 +17,15 @@ margin_bottom = 32.0
 texture = ExtResource( 1 )
 stretch_mode = 4
 
-[node name="Button" type="Button" parent="."]
+[node name="Name" type="Label" parent="."]
 margin_top = 36.0
 margin_right = 66.0
-margin_bottom = 56.0
+margin_bottom = 50.0
+text = "Tower"
+align = 1
+
+[node name="Button" type="Button" parent="."]
+margin_top = 54.0
+margin_right = 66.0
+margin_bottom = 74.0
 text = "Select"

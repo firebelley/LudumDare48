@@ -9,6 +9,7 @@ script = ExtResource( 2 )
 Radius = 2
 ResourceCost = 8
 GhostTexture = ExtResource( 4 )
+DisplayName = "Barracks"
 
 [node name="Sprite" parent="." index="2"]
 texture = ExtResource( 4 )
