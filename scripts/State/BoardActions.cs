@@ -71,5 +71,17 @@ namespace Game.State
         }
 
         public class Complete : BaseAction { }
+
+        public class ShowTooltip : BaseAction
+        {
+            public string Text;
+            public Node Owner;
+        }
+
+        public class ClearTooltip : BaseAction
+        {
+            public Node Owner;
+            public bool Force;
+        }
     }
 }

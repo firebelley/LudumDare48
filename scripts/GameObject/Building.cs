@@ -46,6 +46,8 @@ namespace Game.GameObject
             SetTilePositionFromGlobalPosition();
 
             area2D.Connect("input_event", this, nameof(OnAreaInputEvent));
+            area2D.Connect("mouse_entered", this, nameof(OnAreaMouseEntered));
+            area2D.Connect("mouse_exited", this, nameof(OnAreaMouseExited));
         }
 
         public void SetTilePositionFromGlobalPosition()
@@ -55,7 +57,10 @@ namespace Game.GameObject
         }
 
         protected virtual void Placed() { }
-        protected virtual void Destroyed() { }
+        protected virtual void Destroyed()
+        {
+            GameState.BoardStore.DispatchAction(new BoardActions.ClearTooltip { Owner = this, Force = true });
+        }
 
         private void OnAreaInputEvent(object _, InputEvent inputEvent, object __)
         {
@@ -73,6 +78,27 @@ namespace Game.GameObject
                     QueueFree();
                 }
             }
+        }
+
+        private void OnAreaMouseEntered()
+        {
+            if (this is not MainBuilding && GameState.BoardStore.State.SelectedBuildingInfo == null)
+            {
+                var canDelete = this.GetAncestor<BaseLevel>()?.CanDeleteBuilding(this) ?? false;
+                if (canDelete)
+                {
+                    GameState.BoardStore.DispatchAction(new BoardActions.ShowTooltip { Text = "Right click: Destroy", Owner = this });
+                }
+                else
+                {
+                    GameState.BoardStore.DispatchAction(new BoardActions.ShowTooltip { Text = "Can't destroy right now!", Owner = this });
+                }
+            }
+        }
+
+        private void OnAreaMouseExited()
+        {
+            GameState.BoardStore.DispatchAction(new BoardActions.ClearTooltip { Owner = this });
         }
     }
 }
