@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/UI/MenuLevel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://resources/theme.tres" type="Theme" id=2]
+[ext_resource path="res://scripts/UI/GameComplete.cs" type="Script" id=3]
+
+[node name="GameComplete" type="Node"]
+script = ExtResource( 3 )
+
+[node name="BaseLevel" parent="." instance=ExtResource( 1 )]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/MarginContainer"]
+margin_left = 184.0
+margin_top = 106.0
+margin_right = 456.0
+margin_bottom = 254.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/PanelContainer"]
+margin_left = 3.0
+margin_top = 3.0
+margin_right = 269.0
+margin_bottom = 145.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 258.0
+margin_bottom = 134.0
+rect_min_size = Vector2( 250, 0 )
+custom_constants/separation = 16
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+margin_right = 250.0
+margin_bottom = 16.0
+text = "GAME COMPLETE!"
+align = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 32.0
+margin_right = 250.0
+margin_bottom = 86.0
+text = "Thanks for playing! Please consider leaving a comment telling us what you think!"
+autowrap = true
+
+[node name="BackButton" type="Button" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+margin_left = 63.0
+margin_top = 102.0
+margin_right = 187.0
+margin_bottom = 126.0
+rect_min_size = Vector2( 124, 0 )
+size_flags_horizontal = 4
+text = "Back to Menu"
