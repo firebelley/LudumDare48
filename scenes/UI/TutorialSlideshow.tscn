@@ -46,7 +46,6 @@ margin_right = 336.0
 margin_bottom = 186.0
 
 [node name="1" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
-visible = false
 margin_right = 328.0
 margin_bottom = 150.0
 size_flags_vertical = 3
@@ -55,7 +54,7 @@ custom_constants/separation = 16
 [node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/1"]
 margin_right = 328.0
 margin_bottom = 16.0
-text = "Welcome!"
+text = "Welcome to Magic Frontier!"
 align = 1
 
 [node name="Label2" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/1"]
@@ -68,8 +67,9 @@ autowrap = true
 
 [node name="2" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
+margin_top = 90.0
 margin_right = 328.0
-margin_bottom = 150.0
+margin_bottom = 227.0
 size_flags_vertical = 3
 custom_constants/separation = 16
 
@@ -133,6 +133,7 @@ text = "Barracks destroy goblin camps."
 autowrap = true
 
 [node name="4" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
 margin_right = 328.0
 margin_bottom = 150.0
 size_flags_vertical = 3

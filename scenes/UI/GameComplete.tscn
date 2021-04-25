@@ -22,9 +22,9 @@ __meta__ = {
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/MarginContainer"]
 margin_left = 184.0
-margin_top = 106.0
+margin_top = 96.0
 margin_right = 456.0
-margin_bottom = 254.0
+margin_bottom = 263.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
@@ -32,13 +32,13 @@ size_flags_vertical = 4
 margin_left = 3.0
 margin_top = 3.0
 margin_right = 269.0
-margin_bottom = 145.0
+margin_bottom = 164.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer"]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 258.0
-margin_bottom = 134.0
+margin_bottom = 153.0
 rect_min_size = Vector2( 250, 0 )
 custom_constants/separation = 16
 
@@ -51,15 +51,15 @@ align = 1
 [node name="Label2" type="Label" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 margin_top = 32.0
 margin_right = 250.0
-margin_bottom = 86.0
-text = "Thanks for playing! Please consider leaving a comment telling us what you think!"
+margin_bottom = 105.0
+text = "Thanks for playing Magic frontier! Please consider leaving a comment telling us what you think!"
 autowrap = true
 
 [node name="BackButton" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 4 )]
 margin_left = 63.0
-margin_top = 102.0
+margin_top = 121.0
 margin_right = 187.0
-margin_bottom = 126.0
+margin_bottom = 145.0
 rect_min_size = Vector2( 124, 0 )
 size_flags_horizontal = 4
 text = "Back to Menu"
