@@ -12,8 +12,9 @@ namespace Game.GameObject
         protected override void Placed()
         {
             base.Placed();
-            var resourceTiles = GetNearbyResourceTiles();
-            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesHarvested { Tiles = resourceTiles });
+            CallDeferred(nameof(CollectResources));
+            // var resourceTiles = GetNearbyResourceTiles();
+            // GameState.BoardStore.DispatchAction(new BoardActions.ResourcesHarvested { Tiles = resourceTiles });
         }
 
         protected override void Destroyed()
@@ -21,6 +22,12 @@ namespace Game.GameObject
             base.Destroyed();
             var resourceTiles = GetNearbyResourceTiles();
             GameState.BoardStore.DispatchAction(new BoardActions.ResourcesUnharvested { Tiles = resourceTiles });
+        }
+
+        private void CollectResources()
+        {
+            var resourceTiles = GetNearbyResourceTiles();
+            GameState.BoardStore.DispatchAction(new BoardActions.ResourcesHarvested { Tiles = resourceTiles });
         }
 
         private List<Vector2> GetNearbyResourceTiles()
