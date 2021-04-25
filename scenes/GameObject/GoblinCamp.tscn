@@ -1,9 +1,14 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/GameObject/GoblinCamp.cs" type="Script" id=1]
 [ext_resource path="res://assets/buildings/goblin camp/goblin camp.png" type="Texture" id=2]
 [ext_resource path="res://assets/effects/blob.png" type="Texture" id=3]
 [ext_resource path="res://assets/buildings/goblin camp/goblin camp destroyed.png" type="Texture" id=4]
+[ext_resource path="res://scenes/Util/RandomAudioPlayer.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/sound/fireball_impact_burn_02.wav" type="AudioStream" id=6]
+[ext_resource path="res://assets/sound/fireball_impact_burn_03.wav" type="AudioStream" id=7]
+[ext_resource path="res://assets/sound/fireball_impact_burn_01.wav" type="AudioStream" id=8]
+[ext_resource path="res://assets/sound/fireball_impact_burn_04.wav" type="AudioStream" id=9]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.234528, 0.482085, 1 )
@@ -53,3 +58,26 @@ explosiveness = 0.1
 draw_order = 1
 process_material = SubResource( 5 )
 texture = ExtResource( 3 )
+
+[node name="RandomAudioPlayer" parent="." instance=ExtResource( 5 )]
+randomPitch = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 8 )
+volume_db = -5.0
+bus = "sfx"
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 6 )
+volume_db = -5.0
+bus = "sfx"
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 7 )
+volume_db = -5.0
+bus = "sfx"
+
+[node name="AudioStreamPlayer4" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 9 )
+volume_db = -5.0
+bus = "sfx"

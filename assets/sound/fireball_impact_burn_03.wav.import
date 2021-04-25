@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/fireball_impact_burn_03.wav-c77caee5d536c980f5e1014520ee4603.sample"
+
+[deps]
+
+source_file="res://assets/sound/fireball_impact_burn_03.wav"
+dest_files=[ "res://.import/fireball_impact_burn_03.wav-c77caee5d536c980f5e1014520ee4603.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
