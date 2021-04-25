@@ -11,6 +11,8 @@ namespace Game
         private Label resourcesLabel;
         [Node("MarginContainer/ButtonPanel/MarginContainer/VBoxContainer/RestartButton")]
         private Button restartButton;
+        [Node("MarginContainer/ButtonPanel/MarginContainer/VBoxContainer/OptionsButton")]
+        private Button optionsButton;
         [Node("MarginContainer/ButtonPanel/MarginContainer/VBoxContainer/HelpButton")]
         private Button helpButton;
         [Node]
@@ -30,6 +32,7 @@ namespace Game
             UpdateResourceCount();
             restartButton.Connect("pressed", this, nameof(OnRestartPressed));
             helpButton.Connect("pressed", this, nameof(OnHelpButtonPressed));
+            optionsButton.Connect("pressed", this, nameof(OnOptionsPressed));
         }
 
         private void UpdateResourceCount()
@@ -66,6 +69,12 @@ namespace Game
         {
             var tutorial = resourcePreloader.InstanceSceneOrNull<TutorialSlideshow>();
             AddChild(tutorial);
+        }
+
+        private void OnOptionsPressed()
+        {
+            var menu = GD.Load<PackedScene>("res://scenes/UI/OptionsMenu.tscn").Instance<OptionsMenu>();
+            AddChild(menu);
         }
     }
 }

@@ -22,9 +22,9 @@ __meta__ = {
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/MarginContainer"]
 margin_left = 241.0
-margin_top = 129.0
+margin_top = 113.0
 margin_right = 399.0
-margin_bottom = 231.0
+margin_bottom = 247.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
@@ -32,13 +32,13 @@ size_flags_vertical = 4
 margin_left = 3.0
 margin_top = 3.0
 margin_right = 155.0
-margin_bottom = 99.0
+margin_bottom = 131.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer"]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 144.0
-margin_bottom = 88.0
+margin_bottom = 120.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 8
@@ -49,19 +49,28 @@ margin_bottom = 16.0
 text = "Deeper and Deeper"
 
 [node name="PlayButton" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 4 )]
-margin_left = 36.0
+margin_left = 32.0
 margin_top = 24.0
-margin_right = 100.0
+margin_right = 104.0
 margin_bottom = 48.0
-rect_min_size = Vector2( 64, 0 )
+rect_min_size = Vector2( 72, 0 )
 size_flags_horizontal = 4
 text = "Play"
 
-[node name="QuitButton" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 4 )]
-margin_left = 36.0
+[node name="OptionsButton" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 4 )]
+margin_left = 32.0
 margin_top = 56.0
-margin_right = 100.0
+margin_right = 104.0
 margin_bottom = 80.0
-rect_min_size = Vector2( 64, 0 )
+rect_min_size = Vector2( 72, 0 )
+size_flags_horizontal = 4
+text = "Options"
+
+[node name="QuitButton" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 4 )]
+margin_left = 32.0
+margin_top = 88.0
+margin_right = 104.0
+margin_bottom = 112.0
+rect_min_size = Vector2( 72, 0 )
 size_flags_horizontal = 4
 text = "Quit"

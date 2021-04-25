@@ -25,7 +25,7 @@ __meta__ = {
 }
 
 [node name="ButtonPanel" type="PanelContainer" parent="MarginContainer"]
-margin_left = 506.0
+margin_left = 426.0
 margin_top = 8.0
 margin_right = 632.0
 margin_bottom = 46.0
@@ -35,7 +35,7 @@ size_flags_vertical = 0
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ButtonPanel"]
 margin_left = 3.0
 margin_top = 3.0
-margin_right = 123.0
+margin_right = 203.0
 margin_bottom = 35.0
 custom_constants/margin_right = 4
 custom_constants/margin_top = 4
@@ -45,7 +45,7 @@ custom_constants/margin_bottom = 4
 [node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/ButtonPanel/MarginContainer"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 116.0
+margin_right = 196.0
 margin_bottom = 28.0
 rect_min_size = Vector2( 64, 0 )
 size_flags_horizontal = 0
@@ -57,15 +57,14 @@ margin_bottom = 24.0
 text = "Restart"
 
 [node name="OptionsButton" parent="MarginContainer/ButtonPanel/MarginContainer/VBoxContainer" instance=ExtResource( 8 )]
-visible = false
 margin_left = 80.0
 margin_right = 144.0
 margin_bottom = 24.0
 text = "Options"
 
 [node name="HelpButton" parent="MarginContainer/ButtonPanel/MarginContainer/VBoxContainer" instance=ExtResource( 8 )]
-margin_left = 80.0
-margin_right = 112.0
+margin_left = 160.0
+margin_right = 192.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 32, 0 )
 text = "?"

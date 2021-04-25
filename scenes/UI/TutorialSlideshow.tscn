@@ -8,6 +8,14 @@
 layer = 9
 script = ExtResource( 2 )
 
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.0823529, 0.0823529, 0.0823529, 0.364706 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
