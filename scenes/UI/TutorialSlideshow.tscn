@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://resources/theme.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/UI/TutorialSlideshow.cs" type="Script" id=2]
+[ext_resource path="res://scenes/UI/SoundButton.tscn" type="PackedScene" id=3]
 
 [node name="TutorialSlideshow" type="CanvasLayer"]
 layer = 9
@@ -17,9 +18,9 @@ __meta__ = {
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
 margin_left = 145.0
-margin_top = 139.0
+margin_top = 80.0
 margin_right = 495.0
-margin_bottom = 339.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 350, 200 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -185,12 +186,12 @@ margin_top = 154.0
 margin_right = 328.0
 margin_bottom = 178.0
 
-[node name="BackButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonContainer"]
+[node name="BackButton" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonContainer" instance=ExtResource( 3 )]
 margin_right = 40.0
 margin_bottom = 24.0
 text = "Back"
 
-[node name="NextButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonContainer"]
+[node name="NextButton" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonContainer" instance=ExtResource( 3 )]
 margin_left = 288.0
 margin_right = 328.0
 margin_bottom = 24.0

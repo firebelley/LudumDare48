@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/buildings/tower/tower.png" type="Texture" id=1]
 [ext_resource path="res://scripts/UI/BuildingButton.cs" type="Script" id=2]
+[ext_resource path="res://scenes/UI/SoundButton.tscn" type="PackedScene" id=3]
 
 [node name="BuildingButton" type="VBoxContainer"]
 margin_right = 66.0
@@ -24,7 +25,7 @@ margin_bottom = 50.0
 text = "Tower"
 align = 1
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" parent="." instance=ExtResource( 3 )]
 margin_top = 54.0
 margin_right = 66.0
 margin_bottom = 74.0
