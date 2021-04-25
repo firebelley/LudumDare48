@@ -39,7 +39,6 @@ namespace Game.Level
         {
             var ui = resourcePreloader.InstanceSceneOrNull<LevelUI>();
             AddChild(ui);
-            var rect = TileMap.GetUsedRect();
             levelCamera.GlobalPosition = Entities.GetFirstNodeOfType<MainBuilding>()?.GlobalPosition ?? Vector2.Zero;
         }
 
