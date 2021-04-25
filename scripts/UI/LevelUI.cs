@@ -6,7 +6,7 @@ namespace Game
 {
     public class LevelUI : CanvasLayer
     {
-        [Node("MarginContainer/ResourcesLabel")]
+        [Node("MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ResourcesLabel")]
         private Label resourcesLabel;
 
         public override void _EnterTree()
@@ -25,7 +25,7 @@ namespace Game
 
         private void UpdateResourceCount()
         {
-            resourcesLabel.Text = $"Resources: {GameState.BoardStore.State.ResourcesAvailable}";
+            resourcesLabel.Text = GameState.BoardStore.State.ResourcesAvailable.ToString();
         }
 
         private void ResourcesHarvestedEffect(object _)

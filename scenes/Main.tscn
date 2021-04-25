@@ -15,14 +15,15 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-margin_left = 298.0
-margin_top = 169.0
-margin_right = 342.0
-margin_bottom = 191.0
+margin_left = 288.0
+margin_top = 168.0
+margin_right = 352.0
+margin_bottom = 192.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer"]
-margin_right = 44.0
-margin_bottom = 22.0
+margin_right = 64.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 64, 0 )
 text = "Play"
