@@ -6,6 +6,7 @@ namespace Game.GameObject
     {
         protected override void Placed()
         {
+            base.Placed();
             GameState.BoardStore.DispatchAction(new BoardActions.TowerPlaced { Tower = this });
         }
     }

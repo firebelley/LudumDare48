@@ -56,7 +56,11 @@ namespace Game.GameObject
             Placed();
         }
 
-        protected virtual void Placed() { }
+        protected virtual void Placed()
+        {
+            GameState.BoardStore.DispatchAction(new BoardActions.BuildingPlaced());
+        }
+
         protected virtual void Destroyed()
         {
             GameState.BoardStore.DispatchAction(new BoardActions.ClearTooltip { Owner = this, Force = true });
