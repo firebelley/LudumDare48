@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Destruction_Wooden_2.wav-4443af0221202fffbed7a03f3ae9c80c.sample"
+
+[deps]
+
+source_file="res://assets/sound/Destruction_Wooden_2.wav"
+dest_files=[ "res://.import/Destruction_Wooden_2.wav-4443af0221202fffbed7a03f3ae9c80c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

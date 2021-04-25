@@ -1,12 +1,19 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/buildings/village/village.png" type="Texture" id=1]
 [ext_resource path="res://assets/effects/blob.png" type="Texture" id=2]
 [ext_resource path="res://scripts/Effect/BuildingDestruction.cs" type="Script" id=3]
+[ext_resource path="res://scenes/Util/RandomAudioPlayer.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/sound/wood-handling-shorter.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sound/rock_smashable_falling_debris_04.wav" type="AudioStream" id=7]
+[ext_resource path="res://assets/sound/rock_smashable_falling_debris_01.wav" type="AudioStream" id=8]
+[ext_resource path="res://assets/sound/rock_smashable_falling_debris_02.wav" type="AudioStream" id=9]
+[ext_resource path="res://assets/sound/rock_smashable_falling_debris_03.wav" type="AudioStream" id=10]
+[ext_resource path="res://assets/sound/boulder_impact_on_stones_14.wav" type="AudioStream" id=11]
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=1]
 resource_name = "default"
-length = 1.5
+length = 2.5
 step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath("Control/Sprite:position")
@@ -51,7 +58,7 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 1.5 ),
+"times": PoolRealArray( 2.5 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
@@ -59,19 +66,19 @@ tracks/3/keys = {
 } ]
 }
 
-[sub_resource type="Gradient" id=1]
+[sub_resource type="Gradient" id=2]
 colors = PoolColorArray( 1, 0.931389, 0.820313, 0.690196, 1, 1, 1, 0 )
 
-[sub_resource type="GradientTexture" id=2]
-gradient = SubResource( 1 )
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
 
-[sub_resource type="Curve" id=3]
+[sub_resource type="Curve" id=4]
 _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.135802, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.271605, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=4]
-curve = SubResource( 3 )
+[sub_resource type="CurveTexture" id=5]
+curve = SubResource( 4 )
 
-[sub_resource type="ParticlesMaterial" id=5]
+[sub_resource type="ParticlesMaterial" id=6]
 emission_shape = 1
 emission_sphere_radius = 8.0
 flag_disable_z = true
@@ -89,15 +96,52 @@ angle = 180.0
 angle_random = 1.0
 scale = 2.5
 scale_random = 0.5
-scale_curve = SubResource( 4 )
-color_ramp = SubResource( 2 )
+scale_curve = SubResource( 5 )
+color_ramp = SubResource( 3 )
 
 [node name="BuildingDestruction" type="Node2D"]
 script = ExtResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"
-anims/default = SubResource( 6 )
+anims/default = SubResource( 1 )
+
+[node name="RandomAudioPlayer" parent="." instance=ExtResource( 4 )]
+randomPitch = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 5 )
+volume_db = -10.0
+bus = "sfx"
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 8 )
+volume_db = -10.0
+bus = "sfx"
+
+[node name="AudioStreamPlayer4" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 9 )
+volume_db = -10.0
+bus = "sfx"
+
+[node name="AudioStreamPlayer5" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 10 )
+volume_db = -10.0
+bus = "sfx"
+
+[node name="AudioStreamPlayer6" type="AudioStreamPlayer" parent="RandomAudioPlayer"]
+stream = ExtResource( 7 )
+volume_db = -10.0
+bus = "sfx"
+
+[node name="InitialAudioPlayer" parent="." instance=ExtResource( 4 )]
+randomPitch = true
+minPitch = 0.8
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="InitialAudioPlayer"]
+stream = ExtResource( 11 )
+volume_db = -10.0
+bus = "sfx"
 
 [node name="Control" type="Control" parent="."]
 margin_right = 32.0
@@ -119,5 +163,5 @@ position = Vector2( 16, 23 )
 amount = 20
 lifetime = 0.75
 explosiveness = 0.1
-process_material = SubResource( 5 )
+process_material = SubResource( 6 )
 texture = ExtResource( 2 )

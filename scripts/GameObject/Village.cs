@@ -9,6 +9,9 @@ namespace Game.GameObject
 {
     public class Village : Building
     {
+        [Node]
+        private AudioStreamPlayer sawAudioStreamPlayer;
+
         protected override void Placed()
         {
             base.Placed();
@@ -27,6 +30,10 @@ namespace Game.GameObject
         private void CollectResources()
         {
             var resourceTiles = GetNearbyResourceTiles();
+            if (PlayerPlaced && resourceTiles.Count > 0)
+            {
+                sawAudioStreamPlayer.PlayWithPitchRange(.8f, 1.1f);
+            }
             GameState.BoardStore.DispatchAction(new BoardActions.ResourcesHarvested { Tiles = resourceTiles });
         }
 
