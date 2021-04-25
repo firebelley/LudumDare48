@@ -30,7 +30,7 @@ namespace Game
             var levelIdx = GameState.MetaStore.State.CurrentLevelIndex;
             if (levelIdx >= GameState.MetaStore.State.MaxLevels)
             {
-                // transition to game complete
+                TransitionManager.TransitionTo("res://scenes/UI/GameComplete.tscn");
             }
             else
             {
