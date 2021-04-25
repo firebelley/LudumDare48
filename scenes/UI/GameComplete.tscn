@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/UI/MenuLevel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://resources/theme.tres" type="Theme" id=2]
 [ext_resource path="res://scripts/UI/GameComplete.cs" type="Script" id=3]
+[ext_resource path="res://scenes/UI/SoundButton.tscn" type="PackedScene" id=4]
 
 [node name="GameComplete" type="Node"]
 script = ExtResource( 3 )
@@ -54,7 +55,7 @@ margin_bottom = 86.0
 text = "Thanks for playing! Please consider leaving a comment telling us what you think!"
 autowrap = true
 
-[node name="BackButton" type="Button" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="BackButton" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 4 )]
 margin_left = 63.0
 margin_top = 102.0
 margin_right = 187.0

@@ -109,7 +109,9 @@ namespace Game.UI
             {
                 GridUtils.ForEachTileInRadius(GameState.BoardStore.State.HoveredTile, selectedBuilding.Radius, (vector) =>
                 {
-                    if (GetCellv(vector) == -1 && baseLevel.TileMap.GetCellv(vector) == 0)
+                    var baseTile = baseLevel.TileMap.GetCellv(vector);
+                    var highlightCell = GetCellv(vector) == -1 && selectedBuilding.Type == typeof(Village) ? baseTile == 1 : baseTile == 0;
+                    if (GetCellv(vector) == -1 && highlightCell)
                     {
                         realtimeMap.SetCellv(vector, REALTIME_INDEX);
                     }
