@@ -53,7 +53,7 @@ namespace Game.GameObject
         {
             var wasDisabled = Disabled;
             Disabled = this.GetAncestor<BaseLevel>().ShouldGoblinCampBeDisabled(this);
-            UpdateState(Disabled && wasDisabled != Disabled);
+            UpdateState(barracksPlaced.Barracks.PlayerPlaced && Disabled && wasDisabled != Disabled);
         }
 
         private void BarracksRemovedEffect(BoardActions.BarracksRemoved barracksRemoved)
