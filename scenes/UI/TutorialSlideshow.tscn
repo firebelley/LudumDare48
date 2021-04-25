@@ -1,0 +1,198 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://resources/theme.tres" type="Theme" id=1]
+[ext_resource path="res://scripts/UI/TutorialSlideshow.cs" type="Script" id=2]
+
+[node name="TutorialSlideshow" type="CanvasLayer"]
+layer = 9
+script = ExtResource( 2 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+margin_left = 145.0
+margin_top = 139.0
+margin_right = 495.0
+margin_bottom = 339.0
+rect_min_size = Vector2( 350, 200 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer"]
+margin_left = 3.0
+margin_top = 3.0
+margin_right = 347.0
+margin_bottom = 197.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 336.0
+margin_bottom = 186.0
+
+[node name="1" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+margin_right = 328.0
+margin_bottom = 150.0
+size_flags_vertical = 3
+custom_constants/separation = 16
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/1"]
+margin_right = 328.0
+margin_bottom = 16.0
+text = "Welcome!"
+align = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/1"]
+margin_top = 32.0
+margin_right = 328.0
+margin_bottom = 86.0
+size_flags_vertical = 1
+text = "Your goal is to expand deeper and deeper into the wilderness to reconnect with the magic of the world."
+autowrap = true
+
+[node name="2" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+margin_right = 328.0
+margin_bottom = 150.0
+size_flags_vertical = 3
+custom_constants/separation = 16
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/2"]
+margin_right = 328.0
+margin_bottom = 16.0
+text = "Buildings"
+align = 1
+
+[node name="Label3" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/2"]
+margin_top = 32.0
+margin_right = 328.0
+margin_bottom = 67.0
+size_flags_vertical = 1
+text = "Use WASD or arrow keys to pan the camera."
+autowrap = true
+
+[node name="Label2" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/2"]
+margin_top = 83.0
+margin_right = 328.0
+margin_bottom = 137.0
+size_flags_vertical = 1
+text = "Use left mouse to select buildings from the left bar and to place them into the world."
+autowrap = true
+
+[node name="3" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+margin_right = 328.0
+margin_bottom = 131.0
+size_flags_vertical = 3
+custom_constants/separation = 16
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/3"]
+margin_right = 328.0
+margin_bottom = 16.0
+text = "Buildings"
+align = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/3"]
+margin_top = 32.0
+margin_right = 328.0
+margin_bottom = 48.0
+size_flags_vertical = 1
+text = "Villages gather resources from forests."
+autowrap = true
+
+[node name="Label3" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/3"]
+margin_top = 64.0
+margin_right = 328.0
+margin_bottom = 99.0
+size_flags_vertical = 1
+text = "Towers expand your building placement radius."
+autowrap = true
+
+[node name="Label4" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/3"]
+margin_top = 115.0
+margin_right = 328.0
+margin_bottom = 131.0
+size_flags_vertical = 1
+text = "Barracks destroy goblin camps."
+autowrap = true
+
+[node name="4" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+margin_right = 328.0
+margin_bottom = 150.0
+size_flags_vertical = 3
+custom_constants/separation = 16
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/4"]
+margin_right = 328.0
+margin_bottom = 16.0
+text = "Buildings"
+align = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/4"]
+margin_top = 32.0
+margin_right = 328.0
+margin_bottom = 67.0
+size_flags_vertical = 1
+text = "Buildings can be destroyed by right-clicking them."
+autowrap = true
+
+[node name="Label3" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/4"]
+margin_top = 83.0
+margin_right = 328.0
+margin_bottom = 118.0
+size_flags_vertical = 1
+text = "Destroying buildings refunds the resources spent on them."
+autowrap = true
+
+[node name="5" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+margin_right = 328.0
+margin_bottom = 150.0
+size_flags_vertical = 3
+custom_constants/separation = 16
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/5"]
+margin_right = 328.0
+margin_bottom = 16.0
+text = "Goals"
+align = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/5"]
+margin_top = 32.0
+margin_right = 328.0
+margin_bottom = 67.0
+size_flags_vertical = 1
+text = "Grow your civilization to the rune stone to proceed to the next adventure."
+autowrap = true
+
+[node name="Label3" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/5"]
+margin_top = 83.0
+margin_right = 328.0
+margin_bottom = 137.0
+size_flags_vertical = 1
+text = "You can see this tutorial again at any time by clicking the \"?\" button below. Good luck!"
+autowrap = true
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 154.0
+margin_right = 328.0
+margin_bottom = 178.0
+
+[node name="BackButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonContainer"]
+margin_right = 40.0
+margin_bottom = 24.0
+text = "Back"
+
+[node name="NextButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonContainer"]
+margin_left = 288.0
+margin_right = 328.0
+margin_bottom = 24.0
+size_flags_horizontal = 10
+text = "Next"

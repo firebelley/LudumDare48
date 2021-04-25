@@ -11,6 +11,7 @@ namespace Game.Data
         public int Cost;
         public Texture Texture;
         public Type Type;
+        public string Name;
 
         public static SelectedBuildingInfo FromBuilding(Building building)
         {
@@ -21,6 +22,7 @@ namespace Game.Data
                 Cost = building.ResourceCost,
                 Texture = building.GhostTexture,
                 Type = building.GetType(),
+                Name = building.DisplayName,
             };
         }
     }

@@ -25,6 +25,8 @@ namespace Game.GameObject
         public Texture GhostTexture { get; private set; }
         [Export]
         public bool Deletable { get; private set; } = true;
+        [Export]
+        public string DisplayName { get; private set; }
 
         protected TileMap tileMap;
 

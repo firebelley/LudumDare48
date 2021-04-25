@@ -1,4 +1,5 @@
 using Game.State;
+using Game.UI;
 using Godot;
 using GodotUtilities;
 
@@ -10,6 +11,10 @@ namespace Game
         private Label resourcesLabel;
         [Node("MarginContainer/ButtonPanel/MarginContainer/VBoxContainer/RestartButton")]
         private Button restartButton;
+        [Node("MarginContainer/ButtonPanel/MarginContainer/VBoxContainer/HelpButton")]
+        private Button helpButton;
+        [Node]
+        private ResourcePreloader resourcePreloader;
 
         public override void _EnterTree()
         {
@@ -24,6 +29,7 @@ namespace Game
         {
             UpdateResourceCount();
             restartButton.Connect("pressed", this, nameof(OnRestartPressed));
+            helpButton.Connect("pressed", this, nameof(OnHelpButtonPressed));
         }
 
         private void UpdateResourceCount()
@@ -54,6 +60,12 @@ namespace Game
         private void OnRestartPressed()
         {
             GameState.MetaStore.DispatchAction(new MetaActions.LevelChanged { ToLevelIndex = GameState.MetaStore.State.CurrentLevelIndex });
+        }
+
+        private void OnHelpButtonPressed()
+        {
+            var tutorial = resourcePreloader.InstanceSceneOrNull<TutorialSlideshow>();
+            AddChild(tutorial);
         }
     }
 }
