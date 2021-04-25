@@ -8,6 +8,8 @@ namespace Game
     {
         [Node("MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ResourcesLabel")]
         private Label resourcesLabel;
+        [Node("MarginContainer/ButtonPanel/MarginContainer/VBoxContainer/RestartButton")]
+        private Button restartButton;
 
         public override void _EnterTree()
         {
@@ -21,6 +23,7 @@ namespace Game
         public override void _Ready()
         {
             UpdateResourceCount();
+            restartButton.Connect("pressed", this, nameof(OnRestartPressed));
         }
 
         private void UpdateResourceCount()
@@ -46,6 +49,11 @@ namespace Game
         private void ResourcesRecoveredEffect(object _)
         {
             UpdateResourceCount();
+        }
+
+        private void OnRestartPressed()
+        {
+            GameState.MetaStore.DispatchAction(new MetaActions.LevelChanged { ToLevelIndex = GameState.MetaStore.State.CurrentLevelIndex });
         }
     }
 }
