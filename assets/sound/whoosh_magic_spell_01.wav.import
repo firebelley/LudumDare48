@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/whoosh_magic_spell_01.wav-09a3410c74e8513de87c4703f3721501.sample"
+
+[deps]
+
+source_file="res://assets/sound/whoosh_magic_spell_01.wav"
+dest_files=[ "res://.import/whoosh_magic_spell_01.wav-09a3410c74e8513de87c4703f3721501.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

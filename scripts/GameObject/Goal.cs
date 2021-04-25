@@ -1,5 +1,6 @@
 using Game.Level;
 using Game.State;
+using Game.Util;
 using Godot;
 using GodotUtilities;
 
@@ -13,6 +14,10 @@ namespace Game.GameObject
         private Particles2D victoryParticles;
         [Node]
         private Particles2D victoryParticlesExplosive;
+        [Node]
+        private RandomAudioPlayer whooshAudioPlayer;
+        [Node]
+        private RandomAudioPlayer randomAudioPlayer;
 
         public override void _EnterTree()
         {
@@ -27,6 +32,8 @@ namespace Game.GameObject
 
         private void CompleteEffect(object _)
         {
+            whooshAudioPlayer.Play();
+            randomAudioPlayer.Play();
             victoryParticles.Emitting = true;
             victoryParticlesExplosive.Emitting = true;
         }
