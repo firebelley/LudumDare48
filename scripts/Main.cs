@@ -1,5 +1,6 @@
 using Game.Level;
 using Game.State;
+using Game.UI;
 using Godot;
 using GodotUtilities;
 
@@ -9,6 +10,8 @@ namespace Game
     {
         [Node("CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/PlayButton")]
         private Button playButton;
+        [Node("CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/OptionsButton")]
+        private Button optionsButton;
         [Node("CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/QuitButton")]
         private Button quitButton;
         [Node]
@@ -24,6 +27,7 @@ namespace Game
         {
             playButton.Connect("pressed", this, nameof(OnPlayPressed));
             quitButton.Connect("pressed", this, nameof(OnQuitPressed));
+            optionsButton.Connect("pressed", this, nameof(OnOptionsPressed));
             baseLevel.GetFirstNodeOfType<LevelUI>()?.QueueFree();
         }
 
@@ -35,6 +39,12 @@ namespace Game
         private void OnQuitPressed()
         {
             GetTree().Quit();
+        }
+
+        private void OnOptionsPressed()
+        {
+            var menu = GD.Load<PackedScene>("res://scenes/UI/OptionsMenu.tscn").Instance<OptionsMenu>();
+            AddChild(menu);
         }
     }
 }
