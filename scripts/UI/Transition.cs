@@ -13,7 +13,7 @@ namespace Game.UI
             this.WireNodes();
         }
 
-        private void EmitTransition()
+        public void EmitTransition()
         {
             EmitSignal(nameof(TransitionHit));
         }
