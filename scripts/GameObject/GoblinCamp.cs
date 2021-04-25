@@ -1,5 +1,6 @@
 using Game.Level;
 using Game.State;
+using Game.Util;
 using Godot;
 using GodotUtilities;
 
@@ -19,6 +20,8 @@ namespace Game.GameObject
         private Particles2D particles2D;
         [Node]
         private Sprite sprite;
+        [Node]
+        private RandomAudioPlayer randomAudioPlayer;
 
         private Texture originalTexture;
 
@@ -35,23 +38,29 @@ namespace Game.GameObject
             TilePos = this.GetAncestor<BaseLevel>()?.TileMap.WorldToMap(GlobalPosition) ?? Vector2.Zero;
         }
 
-        private void UpdateState()
+        private void UpdateState(bool playAudio = false)
         {
             sprite.Modulate = Disabled ? new Color(100f / 255f, 100f / 255f, 100f / 255f) : Colors.White;
             particles2D.Emitting = Disabled;
             sprite.Texture = Disabled ? destroyedTexture : originalTexture;
+            if (playAudio)
+            {
+                randomAudioPlayer.PlayTimes(2);
+            }
         }
 
         private void BarracksPlacedEffect(BoardActions.BarracksPlaced barracksPlaced)
         {
+            var wasDisabled = Disabled;
             Disabled = this.GetAncestor<BaseLevel>().ShouldGoblinCampBeDisabled(this);
-            UpdateState();
+            UpdateState(Disabled && wasDisabled != Disabled);
         }
 
         private void BarracksRemovedEffect(BoardActions.BarracksRemoved barracksRemoved)
         {
+            var wasDisabled = Disabled;
             Disabled = this.GetAncestor<BaseLevel>().ShouldGoblinCampBeDisabled(this, barracksRemoved.Barracks);
-            UpdateState();
+            UpdateState(Disabled && wasDisabled != Disabled);
         }
     }
 }
