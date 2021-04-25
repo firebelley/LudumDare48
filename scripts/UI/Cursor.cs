@@ -11,6 +11,9 @@ namespace Game.UI
         private const string INPUT_CLICK = "click";
         private const string INPUT_CLICK_ALTERNATE = "click_alternate";
 
+        [Export]
+        private Texture destroyTexture;
+
         [Node("Node2D/Sprite")]
         private Sprite sprite;
         [Node("Node2D/Control")]
@@ -25,6 +28,7 @@ namespace Game.UI
         private AnimationPlayer animationPlayer;
 
         private Node tooltipOwner;
+        private Texture originalTexture;
 
         public override void _EnterTree()
         {
@@ -35,7 +39,8 @@ namespace Game.UI
 
         public override void _Ready()
         {
-            UpdateTooltip(null);
+            originalTexture = sprite.Texture;
+            UpdateTooltip(null, false);
             Input.SetMouseMode(Input.MouseMode.Hidden);
         }
 
@@ -57,7 +62,7 @@ namespace Game.UI
             }
         }
 
-        private void UpdateTooltip(string text)
+        private void UpdateTooltip(string text, bool useDestructionCursor)
         {
             if (panelAnimationPlayer.IsPlaying())
             {
@@ -68,10 +73,12 @@ namespace Game.UI
             label.Text = text;
             if (!string.IsNullOrEmpty(text))
             {
+                sprite.Texture = useDestructionCursor ? destroyTexture : originalTexture;
                 panelAnimationPlayer.Play(ANIM_DEFAULT);
             }
             else
             {
+                sprite.Texture = originalTexture;
                 panelContainer.Visible = false;
             }
         }
@@ -79,14 +86,14 @@ namespace Game.UI
         private void ShowTooltipEffect(BoardActions.ShowTooltip showTooltip)
         {
             tooltipOwner = showTooltip.Owner;
-            UpdateTooltip(showTooltip.Text);
+            UpdateTooltip(showTooltip.Text, showTooltip.ShowDestroy);
         }
 
         private void ClearTooltipEffect(BoardActions.ClearTooltip clearTooltip)
         {
             if (tooltipOwner == clearTooltip.Owner || clearTooltip.Force)
             {
-                UpdateTooltip(null);
+                UpdateTooltip(null, false);
             }
         }
     }

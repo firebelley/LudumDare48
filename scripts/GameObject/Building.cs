@@ -100,7 +100,7 @@ namespace Game.GameObject
                 var canDelete = this.GetAncestor<BaseLevel>()?.CanDeleteBuilding(this) ?? false;
                 if (canDelete)
                 {
-                    GameState.BoardStore.DispatchAction(new BoardActions.ShowTooltip { Text = "Right click: Destroy", Owner = this });
+                    GameState.BoardStore.DispatchAction(new BoardActions.ShowTooltip { Text = "Right click: Destroy", Owner = this, ShowDestroy = true });
                 }
                 else
                 {
