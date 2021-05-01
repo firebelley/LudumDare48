@@ -9,8 +9,8 @@ namespace Game.Level
 {
     public class RandomLevel : BaseLevel
     {
-        private const int BRANCHES = 3;
-        private const int NODES_PER_BRANCH = 5;
+        private const int BRANCHES = 2;
+        private const int NODES_PER_BRANCH = 2;
 
         public override void _Ready()
         {
@@ -30,6 +30,7 @@ namespace Game.Level
         {
             public Vector2 Position;
             public int Radius = 2;
+            public int Cost = 0;
         }
 
         private class MainModel : BuildingModel
@@ -42,17 +43,24 @@ namespace Game.Level
             public TowerModel()
             {
                 Radius = 3;
+                Cost = 4;
             }
         }
 
         private class VillageModel : BuildingModel
         {
-
+            public VillageModel()
+            {
+                Cost = 2;
+            }
         }
 
         private class BarracksModel : BuildingModel
         {
-
+            public BarracksModel()
+            {
+                Cost = 8;
+            }
         }
 
         private class GoblinCampModel : BuildingModel
@@ -68,6 +76,15 @@ namespace Game.Level
             public List<BarracksModel> BarracksModels = new();
             public List<GoblinCampModel> GoblinCampModels = new();
             public List<RegionNode> ConnectedNodes = new();
+
+            public HashSet<Vector2> GetOccupiedTiles()
+            {
+                var allTiles = VillageModels.Select(x => x.Position)
+                .Concat(BarracksModels.Select(x => x.Position))
+                .Concat(GoblinCampModels.Select(x => x.Position))
+                .Append(RootModel.Position).ToHashSet();
+                return allTiles;
+            }
         }
 
         private RegionNode rootNode;
@@ -75,18 +92,11 @@ namespace Game.Level
 
         public override void _UnhandledInput(InputEvent evt)
         {
-            // base._UnhandledInput(evt);
-            // if (evt.IsActionPressed("activate"))
-            // {
-            //     if (evt is InputEventKey key && key.Control)
-            //     {
-            //         Randomize();
-            //     }
-            //     else
-            //     {
-            //         DoSimulation();
-            //     }
-            // }
+            base._UnhandledInput(evt);
+            if (evt.IsActionPressed("activate"))
+            {
+                GetTree().ChangeScene(Filename);
+            }
         }
 
         private void Randomize()
@@ -98,8 +108,7 @@ namespace Game.Level
                     Position = Vector2.Zero,
                 }
             };
-            allNodes.Add(rootNode);
-            PopulateRegions(rootNode);
+            PopulateRegion(rootNode);
         }
 
         private void PlaceBuildings()
@@ -118,6 +127,13 @@ namespace Game.Level
                     Entities.AddChild(scene);
                 }
 
+                foreach (var village in region.VillageModels)
+                {
+                    scene = resourcePreloader.InstanceSceneOrNull<Village>();
+                    scene.GlobalPosition = village.Position * TileMap.CellSize;
+                    Entities.AddChild(scene);
+                }
+
                 foreach (var connected in region.ConnectedNodes)
                 {
                     var line2d = new Line2D
@@ -133,35 +149,75 @@ namespace Game.Level
             }
         }
 
-        private void PopulateRegions(RegionNode region)
+        private void PopulateRegion(RegionNode region)
         {
-            var placementPos = GetRandomBorderTileInRadius(region.RootModel);
+            allNodes.Add(region);
+            CreateVillages(region);
+
+            if (CountNodesInBranch(region) < NODES_PER_BRANCH)
+            {
+                CreateNewRegion(region);
+            }
+            else if (GetBranchCount() < BRANCHES)
+            {
+                CreateNewRegion(ChooseBranchNode());
+            }
+        }
+
+        private void CreateNewRegion(RegionNode parentRegion)
+        {
+            var placementPos = GetRandomBorderTileInRadius(parentRegion.RootModel);
             var newRegion = new RegionNode
             {
                 RootModel = new TowerModel
                 {
                     Position = placementPos,
                 },
-                ParentRegion = region,
+                ParentRegion = parentRegion,
             };
 
-            region.ConnectedNodes.Add(newRegion);
-            allNodes.Add(newRegion);
+            parentRegion.ConnectedNodes.Add(newRegion);
+            PopulateRegion(newRegion);
+        }
 
-            if (CountNodesInBranch(newRegion) < NODES_PER_BRANCH)
+        private void CreateVillages(RegionNode region)
+        {
+            var occupiedTiles = GetAllOccupiedTiles();
+            var validTilesInRadius = new List<Vector2>();
+            GridUtils.ForEachTileInRadius(region.RootModel.Position, region.RootModel.Radius, (vec) =>
             {
-                PopulateRegions(newRegion);
-            }
-            else if (GetBranchCount() < BRANCHES)
+                if (!occupiedTiles.Contains(vec))
+                {
+                    validTilesInRadius.Add(vec);
+                }
+            });
+
+            validTilesInRadius = validTilesInRadius.OrderBy(x => MathUtil.RNG.Randf()).ToList();
+
+            if (validTilesInRadius.Count == 0) return;
+
+            if (MathUtil.RNG.Randf() < .75f)
             {
-                PopulateRegions(ChooseBranchNode());
+                region.VillageModels.Add(new VillageModel
+                {
+                    Position = validTilesInRadius[0],
+                });
+
+                if (validTilesInRadius.Count > 1 && MathUtil.RNG.Randf() < .5f)
+                {
+                    region.VillageModels.Add(new VillageModel
+                    {
+                        Position = validTilesInRadius[1],
+                    });
+                }
             }
         }
 
         private Vector2 GetRandomBorderTileInRadius(BuildingModel buildingModel)
         {
+            var occupiedTiles = GetAllOccupiedTiles();
             var borderTiles = GridUtils.GetBorderTilesInRadius(buildingModel.Position, buildingModel.Radius);
-            borderTiles = borderTiles.Where(x => !allNodes.Any(y => y.RootModel.Position == x)).ToList();
+            borderTiles = borderTiles.Where(x => !occupiedTiles.Contains(x)).ToList();
             var oneRootTiles = borderTiles.Where(x => CountRootModelsInRadius(x, buildingModel.Radius) == 1);
             var useList = oneRootTiles.Any() ? oneRootTiles : borderTiles;
             return useList.OrderBy(x => MathUtil.RNG.Randf()).First();
@@ -197,6 +253,11 @@ namespace Game.Level
         private int CountRootModelsInRadius(Vector2 p, int radius)
         {
             return allNodes.Count(x => GridUtils.IsPointWithinRadius(x.RootModel.Position, p, radius));
+        }
+
+        private HashSet<Vector2> GetAllOccupiedTiles()
+        {
+            return allNodes.SelectMany(x => x.GetOccupiedTiles()).ToHashSet();
         }
     }
 }
