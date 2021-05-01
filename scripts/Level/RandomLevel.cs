@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.GameObject;
 using Game.Util;
 using Godot;
 using GodotUtilities;
@@ -8,161 +9,194 @@ namespace Game.Level
 {
     public class RandomLevel : BaseLevel
     {
-        private const int WIDTH = 20;
-        private const int HEIGHT = 20;
-        private const int SIMULATIONS = 0;
-
-        private Dictionary<Vector2, int> currentMap = new();
+        private const int BRANCHES = 3;
+        private const int NODES_PER_BRANCH = 5;
 
         public override void _Ready()
         {
             base._Ready();
-            Randomize();
-        }
-
-        public override void _UnhandledInput(InputEvent evt)
-        {
-            base._UnhandledInput(evt);
-            if (evt.IsActionPressed("activate"))
+            foreach (int x in Enumerable.Range(-20, 40))
             {
-                if (evt is InputEventKey key && key.Control)
-                {
-                    Randomize();
-                }
-                else
-                {
-                    DoSimulation();
-                }
-            }
-        }
-
-        private void Randomize()
-        {
-            CreateTileMapCanvas();
-            CreateInitialTiles();
-            foreach (var _ in Enumerable.Range(0, SIMULATIONS))
-            {
-                DoSimulation();
-            }
-            TileMap.UpdateBitmaskRegion(TileMap.GetUsedRect().Position, TileMap.GetUsedRect().End);
-
-        }
-
-        private void CreateTileMapCanvas()
-        {
-            TileMap.Clear();
-            foreach (var x in Enumerable.Range(0, WIDTH))
-            {
-                foreach (var y in Enumerable.Range(0, HEIGHT))
+                foreach (int y in Enumerable.Range(-20, 40))
                 {
                     TileMap.SetCell(x, y, 0);
                 }
             }
+            Randomize();
+            PlaceBuildings();
         }
 
-        private void CreateInitialTiles()
+        private class BuildingModel
         {
-            foreach (var vec in TileMap.GetUsedCells().Cast<Vector2>())
-            {
-                var chance = MathUtil.RNG.Randf();
-                if (chance < .1f)
-                {
-                    TileMap.SetCellv(vec, 1);
-                }
-                else if (chance < .2f)
-                {
-                    TileMap.SetCellv(vec, 2);
-                }
-            }
-            StoreMap();
+            public Vector2 Position;
+            public int Radius = 2;
         }
 
-        private void StoreMap()
+        private class MainModel : BuildingModel
         {
-            foreach (var vec in TileMap.GetUsedCells().Cast<Vector2>())
+
+        }
+
+        private class TowerModel : BuildingModel
+        {
+            public TowerModel()
             {
-                currentMap[vec] = TileMap.GetCellv(vec);
+                Radius = 3;
             }
         }
 
-        private void DoSimulation()
+        private class VillageModel : BuildingModel
         {
-            DoTreeLoop();
-            // DoGrassLoop();
-            StoreMap();
+
         }
 
-        //determine if the tree lives or dies
-        private void DoTreeLoop()
+        private class BarracksModel : BuildingModel
         {
-            foreach (var tile in currentMap.Keys)
+
+        }
+
+        private class GoblinCampModel : BuildingModel
+        {
+
+        }
+
+        private class RegionNode
+        {
+            public RegionNode ParentRegion;
+            public BuildingModel RootModel;
+            public List<VillageModel> VillageModels = new();
+            public List<BarracksModel> BarracksModels = new();
+            public List<GoblinCampModel> GoblinCampModels = new();
+            public List<RegionNode> ConnectedNodes = new();
+        }
+
+        private RegionNode rootNode;
+        private List<RegionNode> allNodes = new();
+
+        public override void _UnhandledInput(InputEvent evt)
+        {
+            // base._UnhandledInput(evt);
+            // if (evt.IsActionPressed("activate"))
+            // {
+            //     if (evt is InputEventKey key && key.Control)
+            //     {
+            //         Randomize();
+            //     }
+            //     else
+            //     {
+            //         DoSimulation();
+            //     }
+            // }
+        }
+
+        private void Randomize()
+        {
+            rootNode = new RegionNode
             {
-                if (currentMap[tile] == 2) continue;
-
-                var areaResourceSum = 0;
-                GridUtils.ForEachTileInRadius(tile, 2, (vec) =>
+                RootModel = new MainModel
                 {
-                    if (vec == tile) return;
-                    if (!currentMap.ContainsKey(vec)) return;
-                    if (currentMap[vec] == 1) areaResourceSum++;
-                });
-
-                var neighborResourceSum = 0;
-                GridUtils.ForEachTileInRadius(tile, 1, (vec) =>
-                {
-                    if ((tile - vec).LengthSquared() > 1) return;
-                    if (vec == tile) return;
-                    if (!currentMap.ContainsKey(vec)) return;
-                    if (currentMap[vec] == 1) neighborResourceSum++;
-                });
-
-                // if (areaResourceSum < 2)
-                // {
-                //     TileMap.SetCellv(tile, 1);
-                // }
-
-                // if (areaResourceSum > 8)
-                // {
-                //     TileMap.SetCellv(tile, 0);
-                // }
-
-                if (neighborResourceSum is > 2 and < 4)
-                {
-                    TileMap.SetCellv(tile, 0);
+                    Position = Vector2.Zero,
                 }
-                if (areaResourceSum < 3)
+            };
+            allNodes.Add(rootNode);
+            PopulateRegions(rootNode);
+        }
+
+        private void PlaceBuildings()
+        {
+            foreach (var region in allNodes)
+            {
+                Node2D scene = region.RootModel switch
                 {
-                    TileMap.SetCellv(tile, 1);
+                    TowerModel => resourcePreloader.InstanceSceneOrNull<Tower>(),
+                    MainModel => resourcePreloader.InstanceSceneOrNull<MainBuilding>(),
+                    _ => null,
+                };
+                if (scene != null)
+                {
+                    scene.GlobalPosition = region.RootModel.Position * TileMap.CellSize;
+                    Entities.AddChild(scene);
                 }
-                // if (neighborResourceSum == 0 && areaResourceSum < 3)
-                // {
-                //     TileMap.SetCellv(tile, 1);
-                // }
-                // if (areaResourceSum > 9)
-                // {
-                //     TileMap.SetCellv(tile, 0);
-                // }
-                // if (neighborResourceSum)
+
+                foreach (var connected in region.ConnectedNodes)
+                {
+                    var line2d = new Line2D
+                    {
+                        Points = new Vector2[] {
+                            region.RootModel.Position * TileMap.CellSize,
+                            connected.RootModel.Position * TileMap.CellSize,
+                        },
+                        Width = 2
+                    };
+                    AddChild(line2d);
+                }
             }
         }
 
-        private void DoGrassLoop()
+        private void PopulateRegions(RegionNode region)
         {
-            foreach (var tile in currentMap.Keys)
+            var placementPos = GetRandomBorderTileInRadius(region.RootModel);
+            var newRegion = new RegionNode
             {
-                if (currentMap[tile] != 0) continue;
-                var neighborTreeCount = 0;
-                GridUtils.ForEachTileInRadius(tile, 1, (vec) =>
+                RootModel = new TowerModel
                 {
-                    if (!currentMap.ContainsKey(vec)) return;
-                    if (currentMap[vec] == 1) neighborTreeCount++;
-                });
+                    Position = placementPos,
+                },
+                ParentRegion = region,
+            };
 
-                if (neighborTreeCount == 1)
+            region.ConnectedNodes.Add(newRegion);
+            allNodes.Add(newRegion);
+
+            if (CountNodesInBranch(newRegion) < NODES_PER_BRANCH)
+            {
+                PopulateRegions(newRegion);
+            }
+            else if (GetBranchCount() < BRANCHES)
+            {
+                PopulateRegions(ChooseBranchNode());
+            }
+        }
+
+        private Vector2 GetRandomBorderTileInRadius(BuildingModel buildingModel)
+        {
+            var borderTiles = GridUtils.GetBorderTilesInRadius(buildingModel.Position, buildingModel.Radius);
+            borderTiles = borderTiles.Where(x => !allNodes.Any(y => y.RootModel.Position == x)).ToList();
+            var oneRootTiles = borderTiles.Where(x => CountRootModelsInRadius(x, buildingModel.Radius) == 1);
+            var useList = oneRootTiles.Any() ? oneRootTiles : borderTiles;
+            return useList.OrderBy(x => MathUtil.RNG.Randf()).First();
+        }
+
+        private int GetBranchCount()
+        {
+            return allNodes.Sum(x => Mathf.Max(0, x.ConnectedNodes.Count - 1));
+        }
+
+        private int CountNodesInBranch(RegionNode region)
+        {
+            var nodesInBranch = 1;
+            var parent = region.ParentRegion;
+            while (parent?.ConnectedNodes.Count == 1)
+            {
+                nodesInBranch++;
+                parent = parent.ParentRegion;
+                if (parent?.ConnectedNodes.Count > 1)
                 {
-                    TileMap.SetCellv(tile, 1);
+                    nodesInBranch++;
+                    break;
                 }
             }
+            return nodesInBranch;
+        }
+
+        private RegionNode ChooseBranchNode()
+        {
+            return allNodes.Where(x => x.ConnectedNodes.Count == 1).OrderBy(x => MathUtil.RNG.Randf()).First();
+        }
+
+        private int CountRootModelsInRadius(Vector2 p, int radius)
+        {
+            return allNodes.Count(x => GridUtils.IsPointWithinRadius(x.RootModel.Position, p, radius));
         }
     }
 }
