@@ -14,13 +14,13 @@ namespace Game.Level
         private const string INPUT_ESCAPE = "escape";
 
         [Node("Entities/TileMap")]
-        public TileMap TileMap { get; private set; }
+        public TileMap TileMap { get; protected set; }
         [Node]
-        private ResourcePreloader resourcePreloader;
+        protected ResourcePreloader resourcePreloader;
         [Node]
-        public Node2D Entities { get; private set; }
+        public Node2D Entities { get; protected set; }
         [Node]
-        private LevelCamera levelCamera;
+        protected LevelCamera levelCamera;
 
         [Export]
         private int startingResources = 5;

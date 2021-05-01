@@ -31,13 +31,7 @@ namespace Game
 
         public override void _Ready()
         {
-            var tileMap = this.GetAncestor<BaseLevel>().TileMap;
-            boundingRect = tileMap.GetUsedRect();
-            boundingRect = new Rect2
-            {
-                Position = boundingRect.Position * tileMap.CellSize,
-                Size = boundingRect.Size * tileMap.CellSize,
-            };
+            CallDeferred(nameof(SetupBounds));
         }
 
         public override void _Process(float delta)
@@ -76,6 +70,17 @@ namespace Game
             {
                 GlobalPosition = new Vector2(GlobalPosition.x, boundingRect.End.y);
             }
+        }
+
+        private void SetupBounds()
+        {
+            var tileMap = this.GetAncestor<BaseLevel>().TileMap;
+            boundingRect = tileMap.GetUsedRect();
+            boundingRect = new Rect2
+            {
+                Position = boundingRect.Position * tileMap.CellSize,
+                Size = boundingRect.Size * tileMap.CellSize,
+            };
         }
 
         private void ShakeEffect(object _)
