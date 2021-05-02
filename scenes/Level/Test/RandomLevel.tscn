@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/Level/BaseLevel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Level/RandomLevel.cs" type="Script" id=2]
@@ -8,10 +8,12 @@
 [ext_resource path="res://scenes/UI/LevelUI.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/GameObject/MainBuilding.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/GameObject/Village.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/GameObject/Goal.tscn" type="PackedScene" id=9]
 
 [node name="RandomLevel" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 startingResources = 2
+debugMode = true
 
 [node name="ResourcePreloader" parent="." index="0"]
-resources = [ PoolStringArray( "Barracks", "LevelComplete", "LevelUI", "MainBuilding", "Tower", "Village" ), [ ExtResource( 5 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 3 ), ExtResource( 8 ) ] ]
+resources = [ PoolStringArray( "Barracks", "Goal", "LevelComplete", "LevelUI", "MainBuilding", "Tower", "Village" ), [ ExtResource( 5 ), ExtResource( 9 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 3 ), ExtResource( 8 ) ] ]

@@ -10,22 +10,39 @@ namespace Game.Level
     public class RandomLevel : BaseLevel
     {
         private const int BRANCHES = 0;
-        private const int NODES_PER_BRANCH = 2;
+        private const int NODES_PER_BRANCH = 5;
         private const int MIN_VILLAGE_RESOURCES = 3;
         private const int MAX_VILLAGE_RESOURCES = 8;
+
+        [Export]
+        private bool debugMode;
 
         public override void _Ready()
         {
             base._Ready();
-            foreach (int x in Enumerable.Range(-20, 40))
+            Randomize();
+
+            var allUsedTiles = GetAllOccupiedTiles();
+            allUsedTiles.UnionWith(resourceTiles);
+            allUsedTiles.Add(goalTile);
+            var rect = new Rect2();
+            foreach (var tile in allUsedTiles)
             {
-                foreach (int y in Enumerable.Range(-20, 40))
+                rect = rect.Expand(tile);
+            }
+
+            for (int x = (int)rect.Position.x; x <= rect.End.x; x++)
+            {
+                for (int y = (int)rect.Position.y; y <= rect.End.y; y++)
                 {
                     TileMap.SetCell(x, y, 0);
                 }
             }
-            Randomize();
+
+            TileMap.UpdateBitmaskRegion(rect.Position, rect.End);
+
             PlaceBuildings();
+            PlaceResources();
         }
 
         private class BuildingModel
@@ -72,6 +89,7 @@ namespace Game.Level
 
         private class RegionNode
         {
+            public string Label;
             public RegionNode ParentRegion;
             public BuildingModel RootModel;
             public List<VillageModel> VillageModels = new();
@@ -81,16 +99,14 @@ namespace Game.Level
             public List<BuildingModel> AllBuildings => new List<BuildingModel>()
                 .Concat(VillageModels)
                 .Concat(BarracksModels)
+                .Concat(GoblinCampModels)
                 .Append(RootModel)
                 .ToList();
+            public HashSet<Vector2> OwnedResourceTiles = new();
 
             public HashSet<Vector2> GetOccupiedTiles()
             {
-                var allTiles = VillageModels.Select(x => x.Position)
-                .Concat(BarracksModels.Select(x => x.Position))
-                .Concat(GoblinCampModels.Select(x => x.Position))
-                .Append(RootModel.Position).ToHashSet();
-                return allTiles;
+                return AllBuildings.Select(x => x.Position).ToHashSet();
             }
 
             public int CountNetResources(HashSet<Vector2> resourceTiles)
@@ -100,7 +116,7 @@ namespace Game.Level
                 {
                     GridUtils.ForEachTileInRadius(village.Position, village.Radius, (vec) =>
                     {
-                        if (resourceTiles.Contains(vec)) sum++;
+                        if (OwnedResourceTiles.Contains(vec)) sum++;
                     });
                 }
 
@@ -110,16 +126,17 @@ namespace Game.Level
                 }
                 return sum;
             }
+
+            public int CountBuildingCost()
+            {
+                return AllBuildings.Sum(x => x.Cost);
+            }
         }
 
         private RegionNode rootNode;
         private List<RegionNode> allNodes = new();
-
-        // Resources that were available to the Node represented by the key
-        // For example, the starting node starts with startingResources accruedResources
-        // When the next node is visited, the accrued resources will be the net resources from its parent node
-        private Dictionary<RegionNode, int> accruedResources = new();
         private HashSet<Vector2> resourceTiles = new();
+        private Vector2 goalTile;
 
         public override void _UnhandledInput(InputEvent evt)
         {
@@ -139,13 +156,18 @@ namespace Game.Level
                     Position = Vector2.Zero,
                 }
             };
-            accruedResources[rootNode] = startingResources;
             PopulateRegion(rootNode);
+            PopulateResources(rootNode);
         }
 
         private void PlaceBuildings()
         {
-            var idx = 0;
+            if (!debugMode)
+            {
+                var goalScene = resourcePreloader.InstanceSceneOrNull<Goal>();
+                goalScene.GlobalPosition = TileMap.MapToWorld(goalTile);
+                Entities.AddChild(goalScene);
+            }
 
             foreach (var region in allNodes)
             {
@@ -159,6 +181,22 @@ namespace Game.Level
                 {
                     scene.GlobalPosition = region.RootModel.Position * TileMap.CellSize;
                     Entities.AddChild(scene);
+                    scene.AddChild(new Label
+                    {
+                        Text = region.Label,
+                        Modulate = Colors.Red,
+                    });
+                    var label = new Label
+                    {
+                        Text = $"{region.CountNetResources(resourceTiles)}",
+                        RectPosition = Vector2.Down * 16f,
+                        Modulate = Colors.Blue,
+                    };
+                    scene.AddChild(label);
+                    if (!debugMode)
+                    {
+                        break;
+                    }
                 }
 
                 foreach (var village in region.VillageModels)
@@ -168,14 +206,9 @@ namespace Game.Level
                     Entities.AddChild(scene);
                     scene.AddChild(new Label
                     {
-                        Text = idx.ToString(),
+                        Text = region.Label,
+                        Modulate = Colors.Red,
                     });
-                    idx++;
-                }
-
-                foreach (var tile in resourceTiles)
-                {
-                    TileMap.SetCellv(tile, 1);
                 }
 
                 foreach (var connected in region.ConnectedNodes)
@@ -183,8 +216,8 @@ namespace Game.Level
                     var line2d = new Line2D
                     {
                         Points = new Vector2[] {
-                            region.RootModel.Position * TileMap.CellSize,
-                            connected.RootModel.Position * TileMap.CellSize,
+                            TileMap.MapToWorld(region.RootModel.Position) + (TileMap.CellSize / 2),
+                            TileMap.MapToWorld(connected.RootModel.Position) + (TileMap.CellSize / 2),
                         },
                         Width = 2
                     };
@@ -193,10 +226,20 @@ namespace Game.Level
             }
         }
 
+        private void PlaceResources()
+        {
+            foreach (var tile in resourceTiles)
+            {
+                TileMap.SetCellv(tile, 1);
+            }
+        }
+
         private void PopulateRegion(RegionNode region)
         {
             allNodes.Add(region);
-            AccrueResources(region);
+            region.Label = allNodes.IndexOf(region).ToString();
+            // AccrueResources(region);
+            // TODO: place barracks, camps here
 
             if (CountNodesInBranch(region) < NODES_PER_BRANCH)
             {
@@ -205,6 +248,33 @@ namespace Game.Level
             else if (GetBranchCount() < BRANCHES)
             {
                 CreateNewRegion(ChooseBranchNode());
+            }
+            else
+            {
+                goalTile = GetRandomBorderTileInRadius(region.RootModel);
+            }
+        }
+
+        private void PopulateResources(RegionNode region)
+        {
+            var availableResources = CountTotalNetResourcesAvailable(region);
+
+            // TODO: Generate enough resources to cover minimum building (tower + village)
+            // TODO: if there is additional cost not covered, generate those resources in the node itself
+
+            foreach (var child in region.ConnectedNodes)
+            {
+                var targetNetResourceGain = Mathf.Max(6, child.CountBuildingCost());
+                while (availableResources < targetNetResourceGain)
+                {
+                    PlaceVillage(region, targetNetResourceGain);
+                    availableResources = CountTotalNetResourcesAvailable(region);
+                }
+            }
+
+            foreach (var child in region.ConnectedNodes)
+            {
+                PopulateResources(child);
             }
         }
 
@@ -220,17 +290,15 @@ namespace Game.Level
                 ParentRegion = parentRegion,
             };
 
-            accruedResources[newRegion] = parentRegion.CountNetResources(resourceTiles) + accruedResources[parentRegion];
-
             parentRegion.ConnectedNodes.Add(newRegion);
             PopulateRegion(newRegion);
         }
 
         private Vector2 GetRandomBorderTileInRadius(BuildingModel buildingModel)
         {
-            var occupiedTiles = GetAllOccupiedTiles();
+            var availableTiles = GetOpenTilesInRadius(buildingModel.Position, buildingModel.Radius);
             var borderTiles = GridUtils.GetBorderTilesInRadius(buildingModel.Position, buildingModel.Radius);
-            borderTiles = borderTiles.Where(x => !occupiedTiles.Contains(x)).ToList();
+            borderTiles = borderTiles.Where(availableTiles.Contains).ToList();
             var oneRootTiles = borderTiles.Where(x => CountRootModelsInRadius(x, buildingModel.Radius) == 1);
             var useList = oneRootTiles.Any() ? oneRootTiles : borderTiles;
             return useList.OrderBy(x => MathUtil.RNG.Randf()).First();
@@ -273,7 +341,7 @@ namespace Game.Level
             return allNodes.SelectMany(x => x.GetOccupiedTiles()).ToHashSet();
         }
 
-        private List<Vector2> GetAvailableResourceTilesInRadius(Vector2 p, int radius)
+        private List<Vector2> GetOpenTilesInRadius(Vector2 p, int radius)
         {
             var unavailableTiles = new HashSet<Vector2>();
             unavailableTiles.UnionWith(resourceTiles);
@@ -291,52 +359,47 @@ namespace Game.Level
             return validTiles;
         }
 
-        private void AccrueResources(RegionNode region)
+        private void PlaceVillage(RegionNode region, int targetMinNet = MIN_VILLAGE_RESOURCES, int targetMaxNet = MAX_VILLAGE_RESOURCES)
         {
-            var availableResources = accruedResources[region];
-            if (availableResources <= 6)
+            var validPlacementTiles = new List<Vector2>();
+            while (validPlacementTiles.Count == 0)
             {
-                var villageCount = MathUtil.RNG.RandiRange(1, availableResources / 2);
-                foreach (var _ in Enumerable.Range(0, villageCount))
+                validPlacementTiles = GetOpenTilesInRadius(region.RootModel.Position, region.RootModel.Radius);
+                if (region.ParentRegion != null)
                 {
-                    var targetMin = Mathf.Max(6 - availableResources + new VillageModel().Cost, MIN_VILLAGE_RESOURCES);
-                    PlaceVillage(region, targetMin);
+                    validPlacementTiles = validPlacementTiles
+                        .Where(x => !GridUtils.IsPointWithinRadius(region.ParentRegion.RootModel.Position, x, region.ParentRegion.RootModel.Radius))
+                        .ToList();
                 }
             }
-            else
-            {
-                if (MathUtil.RNG.Randf() < .5f)
-                {
-
-                }
-            }
-        }
-
-        private void PlaceVillage(RegionNode region, int targetMin = MIN_VILLAGE_RESOURCES, int targetMax = MAX_VILLAGE_RESOURCES)
-        {
-            var validPlacementTiles = GetAvailableResourceTilesInRadius(region.RootModel.Position, region.RootModel.Radius);
-            if (validPlacementTiles.Count == 0) return;
 
             var placementTile = validPlacementTiles.OrderBy(Shuffle).First();
             var villageModel = new VillageModel
             {
                 Position = placementTile,
             };
+            region.VillageModels.Add(villageModel);
 
-            var validResourceTiles = GetAvailableResourceTilesInRadius(villageModel.Position, villageModel.Radius);
-            validResourceTiles.Remove(villageModel.Position);
+            var validResourceTiles = GetOpenTilesInRadius(villageModel.Position, villageModel.Radius);
 
-            if (validResourceTiles.Count < targetMin)
-            {
-                GD.Print("OOPS");
-                return;
-            }
-
-            var targetResourceCount = MathUtil.RNG.RandiRange(targetMin, targetMax);
-            var placementResources = validResourceTiles.OrderBy(Shuffle).Take(targetResourceCount).ToHashSet();
+            var targetResourceCount = MathUtil.RNG.RandiRange(targetMinNet, Mathf.Max(targetMinNet, targetMaxNet));
+            var placementResources = validResourceTiles.OrderBy(Shuffle).Take(targetResourceCount + villageModel.Cost).ToHashSet();
 
             resourceTiles.UnionWith(placementResources);
-            region.VillageModels.Add(villageModel);
+            region.OwnedResourceTiles.UnionWith(placementResources);
+        }
+
+        private int CountTotalNetResourcesAvailable(RegionNode toNode)
+        {
+            var parent = toNode.ParentRegion;
+            var sum = startingResources;
+            while (parent != null)
+            {
+                sum += parent.CountNetResources(resourceTiles);
+                parent = parent.ParentRegion;
+            }
+            sum += toNode.CountNetResources(resourceTiles);
+            return sum;
         }
 
         private float Shuffle<T>(T x)
