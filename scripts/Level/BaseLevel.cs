@@ -23,7 +23,7 @@ namespace Game.Level
         protected LevelCamera levelCamera;
 
         [Export]
-        private int startingResources = 5;
+        protected int startingResources = 5;
 
         public override void _EnterTree()
         {

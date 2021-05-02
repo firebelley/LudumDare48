@@ -11,7 +11,7 @@
 
 [node name="RandomLevel" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-startingResources = 0
+startingResources = 2
 
 [node name="ResourcePreloader" parent="." index="0"]
 resources = [ PoolStringArray( "Barracks", "LevelComplete", "LevelUI", "MainBuilding", "Tower", "Village" ), [ ExtResource( 5 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 3 ), ExtResource( 8 ) ] ]
