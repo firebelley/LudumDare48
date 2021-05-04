@@ -202,7 +202,7 @@ namespace Game.Level
                         var label2 = new Label
                         {
                             Text = $"{CountTotalNetResourcesAvailable(region)}",
-                            RectPosition = Vector2.Down * 16f + Vector2.Right * 16f,
+                            RectPosition = (Vector2.Down * 16f) + (Vector2.Right * 16f),
                             Modulate = Colors.Purple,
                         };
                         scene.AddChild(label2);
