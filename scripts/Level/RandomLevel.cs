@@ -22,7 +22,7 @@ namespace Game.Level
             base._Ready();
             Randomize();
 
-            var allUsedTiles = GetAllOccupiedTiles();
+            var allUsedTiles = GetAllBuildingTiles();
             allUsedTiles.UnionWith(resourceTiles);
             allUsedTiles.Add(goalTile);
             var rect = new Rect2();
@@ -192,7 +192,13 @@ namespace Game.Level
                         RectPosition = Vector2.Down * 16f,
                         Modulate = Colors.Blue,
                     };
-                    scene.AddChild(label);
+                    var label2 = new Label
+                    {
+                        Text = $"{CountTotalNetResourcesAvailable(region)}",
+                        RectPosition = Vector2.Down * 16f + Vector2.Right * 16f,
+                        Modulate = Colors.Purple,
+                    };
+                    scene.AddChild(label2);
                     if (!debugMode)
                     {
                         break;
@@ -202,7 +208,31 @@ namespace Game.Level
                 foreach (var village in region.VillageModels)
                 {
                     scene = resourcePreloader.InstanceSceneOrNull<Village>();
-                    scene.GlobalPosition = village.Position * TileMap.CellSize;
+                    scene.GlobalPosition = TileMap.MapToWorld(village.Position);
+                    Entities.AddChild(scene);
+                    scene.AddChild(new Label
+                    {
+                        Text = region.Label,
+                        Modulate = Colors.Red,
+                    });
+                }
+
+                foreach (var camp in region.GoblinCampModels)
+                {
+                    scene = resourcePreloader.InstanceSceneOrNull<GoblinCamp>();
+                    scene.GlobalPosition = TileMap.MapToWorld(camp.Position);
+                    Entities.AddChild(scene);
+                    scene.AddChild(new Label
+                    {
+                        Text = region.Label,
+                        Modulate = Colors.Red,
+                    });
+                }
+
+                foreach (var barracks in region.BarracksModels)
+                {
+                    scene = resourcePreloader.InstanceSceneOrNull<Barracks>();
+                    scene.GlobalPosition = TileMap.MapToWorld(barracks.Position);
                     Entities.AddChild(scene);
                     scene.AddChild(new Label
                     {
@@ -241,6 +271,12 @@ namespace Game.Level
             // AccrueResources(region);
             // TODO: place barracks, camps here
 
+            if (region != rootNode && MathUtil.RNG.Randf() < .2f)
+            {
+                PlaceGoblinCamp(region);
+                PlaceBarracks(region);
+            }
+
             if (CountNodesInBranch(region) < NODES_PER_BRANCH)
             {
                 CreateNewRegion(region);
@@ -258,16 +294,23 @@ namespace Game.Level
         private void PopulateResources(RegionNode region)
         {
             var availableResources = CountTotalNetResourcesAvailable(region);
+            if (availableResources >= region.CountBuildingCost())
+            {
+                // do nothing
+            }
+            else
+            {
+                var targetNet = region.CountBuildingCost() - availableResources;
+                PlaceVillage(region, targetNet, Mathf.Max(targetNet, MAX_VILLAGE_RESOURCES), avoidSelfGoblinCamps: true);
+            }
 
-            // TODO: Generate enough resources to cover minimum building (tower + village)
-            // TODO: if there is additional cost not covered, generate those resources in the node itself
-
+            availableResources = CountTotalNetResourcesAvailable(region);
             foreach (var child in region.ConnectedNodes)
             {
-                var targetNetResourceGain = Mathf.Max(6, child.CountBuildingCost());
-                while (availableResources < targetNetResourceGain)
+                while (availableResources < 6)
                 {
-                    PlaceVillage(region, targetNetResourceGain);
+                    // TODO: bump this down and allow up to 2 villages to be placed
+                    PlaceVillage(region, 6);
                     availableResources = CountTotalNetResourcesAvailable(region);
                 }
             }
@@ -280,6 +323,7 @@ namespace Game.Level
 
         private void CreateNewRegion(RegionNode parentRegion)
         {
+            // TODO: place root in goblin camp radius
             var placementPos = GetRandomBorderTileInRadius(parentRegion.RootModel);
             var newRegion = new RegionNode
             {
@@ -336,16 +380,16 @@ namespace Game.Level
             return allNodes.Count(x => GridUtils.IsPointWithinRadius(x.RootModel.Position, p, radius));
         }
 
-        private HashSet<Vector2> GetAllOccupiedTiles()
+        private HashSet<Vector2> GetAllBuildingTiles(RegionNode excludeRegion = null)
         {
-            return allNodes.SelectMany(x => x.GetOccupiedTiles()).ToHashSet();
+            return allNodes.Where(x => x != excludeRegion).SelectMany(x => x.GetOccupiedTiles()).ToHashSet();
         }
 
         private List<Vector2> GetOpenTilesInRadius(Vector2 p, int radius)
         {
             var unavailableTiles = new HashSet<Vector2>();
             unavailableTiles.UnionWith(resourceTiles);
-            unavailableTiles.UnionWith(GetAllOccupiedTiles());
+            unavailableTiles.UnionWith(GetAllBuildingTiles());
 
             var validTiles = new List<Vector2>();
             GridUtils.ForEachTileInRadius(p, radius, (vec) =>
@@ -359,7 +403,7 @@ namespace Game.Level
             return validTiles;
         }
 
-        private void PlaceVillage(RegionNode region, int targetMinNet = MIN_VILLAGE_RESOURCES, int targetMaxNet = MAX_VILLAGE_RESOURCES)
+        private void PlaceVillage(RegionNode region, int targetMinNet = MIN_VILLAGE_RESOURCES, int targetMaxNet = MAX_VILLAGE_RESOURCES, bool avoidSelfGoblinCamps = false)
         {
             var validPlacementTiles = new List<Vector2>();
             while (validPlacementTiles.Count == 0)
@@ -371,6 +415,14 @@ namespace Game.Level
                         .Where(x => !GridUtils.IsPointWithinRadius(region.ParentRegion.RootModel.Position, x, region.ParentRegion.RootModel.Radius))
                         .ToList();
                 }
+
+                var allGoblinTiles = allNodes.Where(x => x != region).SelectMany(x => x.GoblinCampModels.SelectMany(y => GridUtils.GetTilesInRadius(y.Position, y.Radius)));
+                if (avoidSelfGoblinCamps)
+                {
+                    allGoblinTiles = allGoblinTiles.Concat(region.GoblinCampModels.SelectMany(x => GridUtils.GetTilesInRadius(x.Position, x.Radius)));
+                }
+
+                validPlacementTiles = validPlacementTiles.Where(x => !allGoblinTiles.Contains(x)).ToList();
             }
 
             var placementTile = validPlacementTiles.OrderBy(Shuffle).First();
@@ -387,6 +439,56 @@ namespace Game.Level
 
             resourceTiles.UnionWith(placementResources);
             region.OwnedResourceTiles.UnionWith(placementResources);
+        }
+
+        private void PlaceGoblinCamp(RegionNode region)
+        {
+            var openTiles = GetOpenTilesInRadius(region.RootModel.Position, region.RootModel.Radius);
+            var buildingTiles = GetAllBuildingTiles(excludeRegion: region);
+            var validPlacementTiles = openTiles
+                .Where(x => !buildingTiles.Any(y => GridUtils.IsPointWithinRadius(x, y, GoblinCamp.RADIUS)) && !GridUtils.IsPointWithinRadius(region.RootModel.Position, x, GoblinCamp.RADIUS));
+            if (!validPlacementTiles.Any()) return;
+
+            var placementTile = validPlacementTiles.OrderBy(Shuffle).First();
+            region.GoblinCampModels.Add(new GoblinCampModel
+            {
+                Position = placementTile,
+            });
+        }
+
+        private void PlaceBarracks(RegionNode region)
+        {
+            if (region.GoblinCampModels.Count == 0) return;
+
+            var allCampTiles = new List<HashSet<Vector2>>();
+            foreach (var camp in region.GoblinCampModels)
+            {
+                var openTiles = GetOpenTilesInRadius(camp.Position, camp.Radius).ToHashSet();
+                allCampTiles.Add(openTiles);
+            }
+            var validBarracksTiles = new HashSet<Vector2>();
+            if (allCampTiles.Count == 1)
+            {
+                validBarracksTiles.UnionWith(allCampTiles[0]);
+            }
+            else
+            {
+                var sharedSet = new HashSet<Vector2>().Union(allCampTiles[0]).ToHashSet();
+                for (int i = 1; i < allCampTiles.Count; i++)
+                {
+                    sharedSet.IntersectWith(allCampTiles[i]);
+                }
+                validBarracksTiles = sharedSet;
+            }
+
+            validBarracksTiles.IntersectWith(GridUtils.GetTilesInRadius(region.RootModel.Position, region.RootModel.Radius));
+
+            var placementTiles = validBarracksTiles.OrderBy(Shuffle).ToList();
+            var placementTile = placementTiles[0];
+            region.BarracksModels.Add(new BarracksModel
+            {
+                Position = placementTile,
+            });
         }
 
         private int CountTotalNetResourcesAvailable(RegionNode toNode)
