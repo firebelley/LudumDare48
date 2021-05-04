@@ -179,32 +179,56 @@ namespace Game.Level
                 };
                 if (scene != null)
                 {
-                    scene.GlobalPosition = region.RootModel.Position * TileMap.CellSize;
-                    Entities.AddChild(scene);
-                    scene.AddChild(new Label
+                    if (!debugMode && region == rootNode)
                     {
-                        Text = region.Label,
-                        Modulate = Colors.Red,
-                    });
-                    var label = new Label
+                        scene.GlobalPosition = region.RootModel.Position * TileMap.CellSize;
+                        Entities.AddChild(scene);
+                    }
+
+                    if (debugMode)
                     {
-                        Text = $"{region.CountNetResources(resourceTiles)}",
-                        RectPosition = Vector2.Down * 16f,
-                        Modulate = Colors.Blue,
-                    };
-                    var label2 = new Label
-                    {
-                        Text = $"{CountTotalNetResourcesAvailable(region)}",
-                        RectPosition = Vector2.Down * 16f + Vector2.Right * 16f,
-                        Modulate = Colors.Purple,
-                    };
-                    scene.AddChild(label2);
-                    if (!debugMode)
-                    {
-                        break;
+                        scene.AddChild(new Label
+                        {
+                            Text = region.Label,
+                            Modulate = Colors.Red,
+                        });
+                        var label = new Label
+                        {
+                            Text = $"{region.CountNetResources(resourceTiles)}",
+                            RectPosition = Vector2.Down * 16f,
+                            Modulate = Colors.Blue,
+                        };
+                        scene.AddChild(label);
+                        var label2 = new Label
+                        {
+                            Text = $"{CountTotalNetResourcesAvailable(region)}",
+                            RectPosition = Vector2.Down * 16f + Vector2.Right * 16f,
+                            Modulate = Colors.Purple,
+                        };
+                        scene.AddChild(label2);
                     }
                 }
 
+                foreach (var camp in region.GoblinCampModels)
+                {
+                    scene = resourcePreloader.InstanceSceneOrNull<GoblinCamp>();
+                    scene.GlobalPosition = TileMap.MapToWorld(camp.Position);
+                    Entities.AddChild(scene);
+                    if (debugMode)
+                    {
+                        scene.AddChild(new Label
+                        {
+                            Text = region.Label,
+                            Modulate = Colors.Red,
+                        });
+                    }
+                }
+            }
+
+            if (!debugMode) return;
+            foreach (var region in allNodes)
+            {
+                Node2D scene;
                 foreach (var village in region.VillageModels)
                 {
                     scene = resourcePreloader.InstanceSceneOrNull<Village>();
@@ -217,17 +241,6 @@ namespace Game.Level
                     });
                 }
 
-                foreach (var camp in region.GoblinCampModels)
-                {
-                    scene = resourcePreloader.InstanceSceneOrNull<GoblinCamp>();
-                    scene.GlobalPosition = TileMap.MapToWorld(camp.Position);
-                    Entities.AddChild(scene);
-                    scene.AddChild(new Label
-                    {
-                        Text = region.Label,
-                        Modulate = Colors.Red,
-                    });
-                }
 
                 foreach (var barracks in region.BarracksModels)
                 {
